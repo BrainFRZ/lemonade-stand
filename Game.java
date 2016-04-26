@@ -11,14 +11,12 @@ package lemonadestand;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
     private static final int MAX_DAYS = 30;
     private static final double STARTING_MONEY = 100.00;
 
-    private static final Random generator = new Random();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static double runGame() {
@@ -37,10 +35,9 @@ public class Game {
             System.out.println("\nDay " + day);
             for (Stand stand : locations) {
                 stand.startDay(totalAssets);
-                System.out.println("The weather in " + stand.location() + " will be "
-                                        + stand.weatherForecast());
+                System.out.println(stand.weatherForecast());
 
-                System.out.printf("Each sign will cost $3.2f. ", stand.signPrice());
+                System.out.printf("Each sign will cost $%3.2f. ", stand.signPrice());
                 int signs = -1;
                 do {
                     try {
@@ -55,11 +52,11 @@ public class Game {
                 } while (signs < 0);
 
 
-                System.out.printf("Each cup will cost $%3.2f. ", stand.cupPrice());
+                System.out.printf("Each cup will cost $%3.2f. ", stand.cupCost());
 
                 double cupPrice = 0.00;
                 do {
-                    System.out.println("Enter your price per cup: ");
+                    System.out.print("Enter your price per cup: ");
                     try {
                         cupPrice = Double.parseDouble(scanner.nextLine());
                         if (cupPrice <= 0.00) {

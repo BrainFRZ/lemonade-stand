@@ -8,22 +8,18 @@
 
 package lemonadestand;
 
-import java.util.Random;
-
 public class Stand {
     public static enum Resource {
         CUPS, ICE, LEMONS, SUGAR, WATER;
     }
 
 
-    public static final double STAND_PRICE = 500.00;
+    public static final double STAND_PRICE = 150.00;
     public static final double START_PRICE = 100.00;
 
     private static final int START_HOUR = 10;
     private static final int END_HOUR   = 19;
 
-
-    private static final Random generator = new Random();
 
     private static final double[] LEMONS_PRICES   = { 1.00, 0.50, 0.33 };
     private static final double[] SUGAR_PRICES    = { 0.50, 0.25 };
@@ -54,9 +50,9 @@ public class Stand {
     public final void generateDay() {
         if (!dayGenerated) {
             resourcePrices[Resource.CUPS.ordinal()]   = CUPS_PRICE;
-            resourcePrices[Resource.ICE.ordinal()]    = ICE_PRICES[generator.nextInt(ICE_PRICES.length)];
-            resourcePrices[Resource.LEMONS.ordinal()] = LEMONS_PRICES[generator.nextInt(LEMONS_PRICES.length)];
-            resourcePrices[Resource.SUGAR.ordinal()]  = SUGAR_PRICES[generator.nextInt(SUGAR_PRICES.length)];
+            resourcePrices[Resource.ICE.ordinal()]    = ICE_PRICES[Launcher.random.nextInt(ICE_PRICES.length)];
+            resourcePrices[Resource.LEMONS.ordinal()] = LEMONS_PRICES[Launcher.random.nextInt(LEMONS_PRICES.length)];
+            resourcePrices[Resource.SUGAR.ordinal()]  = SUGAR_PRICES[Launcher.random.nextInt(SUGAR_PRICES.length)];
             resourcePrices[Resource.WATER.ordinal()]  = WATER_PRICE;
             cupsMade = cupsSold = 0;
 
@@ -65,7 +61,7 @@ public class Stand {
                 costPerCup += price;
             }
 
-            weather = Weather.values()[generator.nextInt(Weather.values().length)];
+            weather = Weather.values()[Launcher.random.nextInt(Weather.values().length)];
             dayGenerated = true;
         }
     }
@@ -76,7 +72,7 @@ public class Stand {
         }
 
         for (int hour = START_HOUR; hour <= END_HOUR; hour++) {
-            
+
         }
 
         dayGenerated = false;
@@ -94,6 +90,10 @@ public class Stand {
         return pricePerCup;
     }
 
+    public double cupCost() {
+        return costPerCup;
+    }
+
     public double signPrice() {
         return SIGN_PRICE;
     }
@@ -107,7 +107,7 @@ public class Stand {
     }
 
     public String weatherForecast() {
-        return "The weather will be " + weather + " today.";
+        return "The weather in " + location + " will be " + weather + " today.";
     }
 
     public boolean makeProduct(String product, int quantity) {
