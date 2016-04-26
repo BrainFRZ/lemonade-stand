@@ -78,14 +78,16 @@ public class Game {
             }
             System.out.printf("Current total assets: $%5.02f%n%n", totalAssets);
 
-            System.out.print("Start another day [Y/n]? ");
-            userContinues = scanner.nextLine();
+            if (day < MAX_DAYS) {
+                System.out.print("Start another day [Y/n]? ");
+                userContinues = scanner.nextLine();
 
-            if (totalAssets >= Stand.STAND_PRICE) {
-                System.out.print("Would you like to purchase another stand [y/N]? ");
-                String response = scanner.nextLine();
-                if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
-                    locations.add(new Stand(promptStandLocation(), totalAssets));
+                if (!userContinues.equalsIgnoreCase("n") && totalAssets >= Stand.STAND_PRICE) {
+                    System.out.print("Would you like to purchase another stand [y/N]? ");
+                    String response = scanner.nextLine();
+                    if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
+                        locations.add(new Stand(promptStandLocation(), totalAssets));
+                    }
                 }
             }
         }
