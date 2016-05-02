@@ -21,15 +21,8 @@ public class Stand {
     private static final int END_HOUR   = 19;
 
 
-    private static final double[] LEMONS_PRICES   = { 1.00, 0.50, 0.33 };
-    private static final double[] SUGAR_PRICES    = { 0.50, 0.25 };
-    private static final double[] ICE_PRICES      = { 0.10, 0.05 };
-    private static final double WATER_PRICE       =   0.05;
-    private static final double CUPS_PRICE        =   0.02;
-    private static final double SIGN_PRICE        =   0.25;
-
-    private double[] resourcePrices;
-    private double costPerCup, pricePerCup;
+    private ResourcePrices resourcePrices;
+    private double pricePerCup;
 
     private int cupsMade, cupsSold;
     private double moneyAtOpen, money;
@@ -43,33 +36,20 @@ public class Stand {
         moneyAtOpen   = money = initialMoney;
         pricePerCup   = 0.00;
 
-        resourcePrices = new double[Resource.values().length];
         generateDay();
     }
 
     public final void generateDay() {
         if (!dayGenerated) {
-            resourcePrices[Resource.CUPS.ordinal()]   = CUPS_PRICE;
-            resourcePrices[Resource.ICE.ordinal()]    = ICE_PRICES[Launcher.random.nextInt(ICE_PRICES.length)];
-            resourcePrices[Resource.LEMONS.ordinal()] = LEMONS_PRICES[Launcher.random.nextInt(LEMONS_PRICES.length)];
-            resourcePrices[Resource.SUGAR.ordinal()]  = SUGAR_PRICES[Launcher.random.nextInt(SUGAR_PRICES.length)];
-            resourcePrices[Resource.WATER.ordinal()]  = WATER_PRICE;
+            resourcePrices = new ResourcePrices();
             cupsMade = cupsSold = 0;
-
-            costPerCup  = 0;
-            for (double price : resourcePrices) {
-                costPerCup += price;
-            }
-
-            weather = Weather.values()[Launcher.random.nextInt(Weather.values().length)];
+            weather = Weather.values()[Game.random.nextInt(Weather.values().length)];
             dayGenerated = true;
         }
     }
 
-    public void startDay(double totalMoney) {
-        if (!dayGenerated) {
-            generateDay();
-        }
+    public void runDay(double totalMoney) {
+        generateDay();
 
         for (int hour = START_HOUR; hour <= END_HOUR; hour++) {
 
@@ -91,11 +71,11 @@ public class Stand {
     }
 
     public double cupCost() {
-        return costPerCup;
+        return resourcePrices.costPerCup;
     }
 
     public double signPrice() {
-        return SIGN_PRICE;
+        return resourcePrices.signs;
     }
 
     public double money() {
@@ -115,9 +95,9 @@ public class Stand {
         double cost = 0.00;
 
         if (product.equalsIgnoreCase("cups")) {
-            cost = quantity * costPerCup;
+            cost = quantity * resourcePrices.costPerCup;
         } else if (product.equalsIgnoreCase("signs")) {
-            cost = quantity * SIGN_PRICE;
+            cost = quantity * resourcePrices.signs;
         } else {
             throw new IllegalArgumentException("Illegal purchase:  " + product);
         }
@@ -135,7 +115,7 @@ public class Stand {
 
         report.append("Daily Report for ").append(location).append("\n")
               .append(String.format("    You charged $%-4.2f per cup.%n", pricePerCup))
-              .append(String.format("    Each cup cost $%-3.02f.%n", costPerCup))
+              .append(String.format("    Each cup cost $%-3.02f.%n", resourcePrices.costPerCup))
               .append("    You sold ").append(cupsSold).append(" cups.\n")
               .append(String.format("    You made a net profit of $%-4.2f!%n", netProfit()));
 

@@ -11,12 +11,14 @@ package lemonadestand;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
     private static final int MAX_DAYS = 30;
     private static final double STARTING_MONEY = 100.00;
 
+    protected final static Random random = new Random();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static double runGame() {
@@ -34,7 +36,7 @@ public class Game {
 
             System.out.println("\nDay " + day);
             for (Stand stand : locations) {
-                stand.startDay(totalAssets);
+                stand.runDay(totalAssets);
                 System.out.println(stand.weatherForecast());
 
                 System.out.printf("Each sign will cost $%3.2f. ", stand.signPrice());

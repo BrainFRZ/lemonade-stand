@@ -9,13 +9,8 @@
 package lemonadestand;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
-import java.io.Serializable;
 
 public class Launcher {
-    protected final static Random random = new Random();
-
     private final static String SCORES_FILE = "highscores.sco";
 
     public static void main(String[] args) {
