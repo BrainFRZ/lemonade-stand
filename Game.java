@@ -8,7 +8,6 @@
 
 package lemonadestand;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -23,11 +22,11 @@ public class Game {
 
     public static double runGame() {
         String userContinues = "y";
-        ArrayList<Stand> locations = new ArrayList<>();
+        Business business = new Business();
         double totalAssets = STARTING_MONEY;
 
         System.out.println("Congratulations on starting your new business!!");
-        locations.add(new Stand(promptStandLocation(), totalAssets));
+        business.add(new Stand(promptStandLocation(), business));
 
         Queue<String> reports = new LinkedList<>();
         double[] dailyTotals = new double[MAX_DAYS];
@@ -36,7 +35,7 @@ public class Game {
             boolean resourceMade = false;
 
             System.out.println("\nDay " + day);
-            for (Stand stand : locations) {
+            for (Stand stand : business) {
                 stand.runDay(totalAssets);
                 System.out.println(stand.weatherForecast());
 
@@ -113,11 +112,11 @@ public class Game {
                 System.out.print("Start another day [Y/n]? ");
                 userContinues = scanner.nextLine();
 
-                if (!userContinues.equalsIgnoreCase("n") && totalAssets >= Stand.STAND_PRICE) {
+                if (!userContinues.equalsIgnoreCase("n") && totalAssets >= Business.STAND_PRICE) {
                     System.out.print("Would you like to purchase another stand [y/N]? ");
                     String response = scanner.nextLine();
                     if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
-                        locations.add(new Stand(promptStandLocation(), totalAssets));
+                        business.add(new Stand(promptStandLocation(), business));
                     }
                 }
             }

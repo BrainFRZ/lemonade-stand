@@ -15,8 +15,6 @@ public class Stand {
 
 
     //Public info for all stands
-    public static final double STAND_PRICE = 150.00;        //Cost of a new stand
-    public static final double START_PRICE = 100.00;        //Money you start with in each stand
     public static final int BASE_HOURLY_CUSTOMERS = 10;     //Normal number of customers in an hour
 
     //Static resource prices for all stands
@@ -36,14 +34,14 @@ public class Stand {
     private double pricePerCup;
 
     private int cupsMade, cupsSold, signsMade;
-    private double moneyAtOpen, money;
     private final String location;
+    private final Business business;
     private boolean dayGenerated;
     private Weather weather;
 
-    public Stand(String location, double initialMoney) {
+    public Stand(String location, Business business) {
         this.location = location;
-        money         = initialMoney;
+        this.business = business;
         pricePerCup   = 0.00;
 
         generateDay();
@@ -51,7 +49,6 @@ public class Stand {
 
     public final void generateDay() {
         if (!dayGenerated) {
-            moneyAtOpen    = money;
             weather        = Weather.values()[Game.random.nextInt(Weather.values().length)];
             resourcePrices = new ResourcePrices();
             cupsMade       = cupsSold = 0;
@@ -65,7 +62,9 @@ public class Stand {
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
             int hourlyCustomers = hourlyCustomers();
             for (int customer = 0; customer < hourlyCustomers; customer++) {
-
+                if (!Customer.tooExpensive(pricePerCup, weather)) {
+                    cupsSold++;
+                }
             }
         }
 
@@ -112,10 +111,6 @@ public class Stand {
         return signsMade;
     }
 
-    public double money() {
-        return money;
-    }
-
     public String location() {
         return location;
     }
@@ -136,8 +131,8 @@ public class Stand {
             throw new IllegalArgumentException("Illegal purchase:  " + product);
         }
 
-        if (cost <= money) {
-            money -= cost;
+        if (cost <= business.getMoney()) {
+            business.spend(cost);
             purchased = true;
 
             if (product.equalsIgnoreCase("cups")) {
@@ -163,7 +158,7 @@ public class Stand {
     }
 
     public double netProfit() {
-        return money - moneyAtOpen;
+        return cupsSold * pricePerCup;
     }
 
     private class ResourcePrices {
