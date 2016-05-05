@@ -33,39 +33,68 @@ public class Game {
         double[] dailyTotals = new double[MAX_DAYS];
         for (int day = 1; day <= MAX_DAYS && !userContinues.equalsIgnoreCase("n"); day++) {
             double dailyProfit = 0.00;
+            boolean resourceMade = false;
 
             System.out.println("\nDay " + day);
             for (Stand stand : locations) {
                 stand.runDay(totalAssets);
                 System.out.println(stand.weatherForecast());
 
-                System.out.printf("Each sign will cost $%3.2f. ", stand.signPrice());
-                int signs = -1;
+                System.out.println("You currently have " + stand.getSignsMade() + " signs.");
+                System.out.printf("Your signs cost $%3.2f to make. ", stand.signPrice());
+
+                int resource = -1;
                 do {
                     try {
                         System.out.print("How many signs do you want to make? ");
-                        signs = Integer.parseInt(scanner.nextLine());
-                        if (signs < 0) {
-                            System.out.print("No one wants to buy your signs today. ");
-                        }
+                        resource = Integer.parseInt(scanner.nextLine());
                     } catch (NumberFormatException e) {
                         System.out.print("That isn't a price! ");
                     }
-                } while (signs < 0);
+
+                    if (resource < 0) {
+                        System.out.print("No one wants to buy your signs today. ");
+                    } else {
+                        resourceMade = stand.makeProduct("signs", resource);
+
+                        if (!resourceMade) {
+                            System.out.print("You can't afford that many! ");
+                        }
+                    }
+                } while (resource < 0 || !resourceMade);
 
 
-                System.out.printf("Each cup will cost $%3.2f. ", stand.cupCost());
+                System.out.printf("Your cups cost $%3.2f to make. ", stand.cupCost());
+                do {
+                    try {
+                        System.out.print("How many signs do you want to make? ");
+                        resource = Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.print("That isn't a price! ");
+                    }
+
+                    if (resource < 0) {
+                        System.out.print("You can't drink your own product! ");
+                    } else {
+                        resourceMade = stand.makeProduct("cups", resource);
+
+                        if (!resourceMade) {
+                            System.out.print("You can't afford that many! ");
+                        }
+                    }
+                } while (resource < 0 || !resourceMade);
 
                 double cupPrice = 0.00;
                 do {
                     System.out.print("Enter your price per cup: ");
                     try {
                         cupPrice = Double.parseDouble(scanner.nextLine());
-                        if (cupPrice <= 0.00) {
-                            System.out.print("The price must be positive! ");
-                        }
                     } catch (NumberFormatException e) {
                         System.out.print("That isn't a price! ");
+                    }
+
+                    if (cupPrice <= 0.00) {
+                        System.out.print("It must be bad if you're paying people to buy! ");
                     }
                 } while (cupPrice <= 0.00);
                 stand.setCupPrice(cupPrice);

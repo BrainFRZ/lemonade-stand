@@ -63,7 +63,10 @@ public class Stand {
         generateDay();
 
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
+            int hourlyCustomers = hourlyCustomers();
+            for (int customer = 0; customer < hourlyCustomers; customer++) {
 
+            }
         }
 
         dayGenerated = false;
@@ -72,16 +75,15 @@ public class Stand {
     public int hourlyCustomers() {
         int customers = BASE_HOURLY_CUSTOMERS;
 
-        switch (weather) {
-            case RAINY:
-                customers -= Game.random.nextInt(3);
-            case CLOUDY:
-                customers += Game.random.nextInt(5);
-            case SUNNY:
-                customers += Game.random.nextInt(11);
+        if (weather == Weather.RAINY) {
+            customers -= Game.random.nextInt(3);
+        } else if (weather == Weather.CLOUDY) {
+            customers += Game.random.nextInt(5);
+        } else if (weather == Weather.SUNNY) {
+            customers += Game.random.nextInt(11);
         }
 
-        customers += customers * (signsMade / 100);
+        customers += (int)(customers * (signsMade / 100.00));
 
         return customers;
     }
@@ -104,6 +106,10 @@ public class Stand {
 
     public double signPrice() {
         return resourcePrices.signs;
+    }
+
+    public int getSignsMade() {
+        return signsMade;
     }
 
     public double money() {

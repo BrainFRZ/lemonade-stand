@@ -2,44 +2,48 @@ package lemonadestand;
 
 public class Customer {
     /**
-     * This method determines whether a customer will
-     *
-     * @param price
-     * @param weather
-     * @return
-     */
-    private static boolean willBuy(double price, Weather weather) {
-        boolean willBuy = false;
-
-        return willBuy;
-    }
-
-
-    /**
      * This method determines whether a customer considers a cup of lemonade to be too expensive
      * based on the cup's price and the customer's generosity. Cups of lemonade can cost between
      * $0.70 and $1.67 with the average cup costing $1.13. For playability, the average customer
-     * will be willing to pay at least $1.50 before they consider it's too expensive. However, to
-     * simulate customers' different personalities, they might be stingy, normal or generous. They
-     * also will have a random change to the price they're willing to change to pay more if they're
-     * generous or less if they're stingy. If the price of the cup isn't more than what they're
-     * willing to pay, it's not too expensive.
+     * will be willing to pay at least $2.00 before they consider it's too expensive.
+     *
+     * However, to simulate customers' different personalities, they might be stingy, normal or
+     * generous. They also will have a random change to the price they're willing to change to pay
+     * more if they're generous or less if they're stingy. Weather is also a factor, since someone
+     * will be willing to pay more on a hot and sunny day but not as much when it's a cool and
+     * cloudy day.
+     *
+     * If the price of the cup isn't more than what they're willing to pay, it's not too expensive.
      *
      * @param price Price of a cup of lemonade
+     * @param weather Weather at the stand the customer is at
      * @return True if the cup is too expensive
      */
-    private static boolean tooExepensive(double price) {
-        final double LOWEST_BUY_PRICE = 1.50;   //All customers will pay at least $1.50
+    public static boolean tooExpensive(double price, Weather weather) {
+        final double LOWEST_BUY_PRICE = 2.00;   //All customers will pay at least $2.00
 
-        int stinginess;                         //Whether customer is stingy, normal or nice
-        double generosityDelta;                 //Delta/Change based on generosity
-        double willingToPay;                    //How much the customer is willing to pay
+        int stinginess;                             //Whether customer is stingy, normal or generous
+        double generosityDelta;                     //Delta/Change based on generosity
+        double willingToPay = LOWEST_BUY_PRICE;     //How much the customer is willing to pay
 
         stinginess = -1 + Game.random.nextInt(3);
-        generosityDelta = Game.random.nextInt(50) / 100;   //Up to $0.50 cents delta/change;
+        generosityDelta = Game.random.nextInt(50) / 100.00;   //Up to $0.50 cents delta/change;
 
-        willingToPay = LOWEST_BUY_PRICE + stinginess * generosityDelta;
+        willingToPay += stinginess * generosityDelta;
+        willingToPay += weatherModifier(weather);
 
         return (price > willingToPay);
+    }
+
+    private static double weatherModifier(Weather weather) {
+        double modifier = 0.0;
+
+        if (weather == Weather.CLOUDY) {
+            modifier = -0.25;   //Decreases price willing to pay by 25 cents
+        } else if (weather == Weather.SUNNY) {
+            modifier = +0.25;   //Increases price willing to pay by 25 cents
+        }
+
+        return modifier;
     }
 }
