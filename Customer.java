@@ -1,25 +1,6 @@
 package lemonadestand;
 
 public class Customer {
-    public final static int BASE_HOURLY_CUSTOMERS = 10;  //Normal number of customers in an hour
-
-    public static int hourlyCustomers(Weather weather, int signsMade) {
-        int customers = BASE_HOURLY_CUSTOMERS;
-
-        switch (weather) {
-            case RAINY:
-                customers -= Game.random.nextInt(3);
-            case CLOUDY:
-                customers += Game.random.nextInt(5);
-            case SUNNY:
-                customers += Game.random.nextInt(11);
-        }
-
-        customers += customers * (signsMade / 100);
-
-        return customers;
-    }
-
     /**
      * This method determines whether a customer will
      *

@@ -14,33 +14,36 @@ public class Stand {
     }
 
 
-    public static final double STAND_PRICE = 150.00;
-    public static final double START_PRICE = 100.00;
+    //Public info for all stands
+    public static final double STAND_PRICE = 150.00;        //Cost of a new stand
+    public static final double START_PRICE = 100.00;        //Money you start with in each stand
+    public static final int BASE_HOURLY_CUSTOMERS = 10;     //Normal number of customers in an hour
 
-    private static final double[] LEMONS_PRICES = {1.0, 0.5, 0.33};
-    private static final double[] SUGAR_PRICES = {0.5, 0.25};
-    private static final double[] ICE_PRICES = {0.1, 0.05};
-    private static final double WATER_PRICE = 0.05;
-    private static final double CUPS_PRICE = 0.02;
-    private static final double SIGN_PRICE = 0.25;
+    //Static resource prices for all stands
+    private static final double[] LEMONS_PRICES = {1.0, 0.5, 0.33};     //Possible lemon prices
+    private static final double[] SUGAR_PRICES = {0.5, 0.25};           //Possible sugar prices
+    private static final double[] ICE_PRICES = {0.1, 0.05};             //Possible ice prices
+    private static final double WATER_PRICE = 0.05;                     //Price of water
+    private static final double CUPS_PRICE = 0.02;                      //Price of cups
+    private static final double SIGN_PRICE = 0.25;                      //Price of signs
 
-    private static final int START_HOUR = 10;
-    private static final int END_HOUR   = 19;
+    //Hours all stands are open
+    private static final int START_HOUR = 10;       //Hour stands start (10AM)
+    private static final int CLOSE_HOUR = 19;       //Hour stands close (7PM)
 
 
     private ResourcePrices resourcePrices;
     private double pricePerCup;
 
-    private int cupsMade, cupsSold;
+    private int cupsMade, cupsSold, signsMade;
     private double moneyAtOpen, money;
     private final String location;
     private boolean dayGenerated;
-
     private Weather weather;
 
     public Stand(String location, double initialMoney) {
         this.location = location;
-        moneyAtOpen   = money = initialMoney;
+        money         = initialMoney;
         pricePerCup   = 0.00;
 
         generateDay();
@@ -48,21 +51,39 @@ public class Stand {
 
     public final void generateDay() {
         if (!dayGenerated) {
+            moneyAtOpen    = money;
+            weather        = Weather.values()[Game.random.nextInt(Weather.values().length)];
             resourcePrices = new ResourcePrices();
-            cupsMade = cupsSold = 0;
-            weather = Weather.values()[Game.random.nextInt(Weather.values().length)];
-            dayGenerated = true;
+            cupsMade       = cupsSold = 0;
+            dayGenerated   = true;
         }
     }
 
     public void runDay(double totalMoney) {
         generateDay();
 
-        for (int hour = START_HOUR; hour <= END_HOUR; hour++) {
+        for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
 
         }
 
         dayGenerated = false;
+    }
+
+    public int hourlyCustomers() {
+        int customers = BASE_HOURLY_CUSTOMERS;
+
+        switch (weather) {
+            case RAINY:
+                customers -= Game.random.nextInt(3);
+            case CLOUDY:
+                customers += Game.random.nextInt(5);
+            case SUNNY:
+                customers += Game.random.nextInt(11);
+        }
+
+        customers += customers * (signsMade / 100);
+
+        return customers;
     }
 
     public void setCupPrice(double price) {
@@ -112,6 +133,12 @@ public class Stand {
         if (cost <= money) {
             money -= cost;
             purchased = true;
+
+            if (product.equalsIgnoreCase("cups")) {
+                cupsMade += quantity;
+            } else {
+                signsMade += quantity;
+            }
         }
 
         return purchased;
@@ -143,7 +170,6 @@ public class Stand {
         public double costPerCup;
 
         public ResourcePrices() {
-            super();
             lemons = LEMONS_PRICES[Game.random.nextInt(LEMONS_PRICES.length)];
             sugar = SUGAR_PRICES[Game.random.nextInt(SUGAR_PRICES.length)];
             ice = ICE_PRICES[Game.random.nextInt(ICE_PRICES.length)];
