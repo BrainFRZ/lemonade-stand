@@ -63,7 +63,7 @@ public class Stand {
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
             int hourlyCustomers = hourlyCustomers();
             dailyCustomers += hourlyCustomers;
-            for (int customer = 0; customer < hourlyCustomers; customer++) {
+            for (int customer = 0; customer < hourlyCustomers && cupsSold < cupsMade; customer++) {
                 if (!Customer.tooExpensive(pricePerCup, weather)) {
                     cupsSold++;
                 }
@@ -148,20 +148,20 @@ public class Stand {
     }
 
     public String dailyReport() {
-        StringBuilder report = new StringBuilder();
+        String report = "Daily Report for " + location + "\n";
 
-        report.append("Daily Report for ").append(location).append("\n")
-              .append(String.format("    You charged $%-4.2f per cup.%n", pricePerCup))
-              .append(String.format("    Each cup cost $%-3.02f.%n", resourcePrices.costPerCup))
-              .append("    You had ").append(dailyCustomers).append(" potential customers.")
-              .append("    You sold ").append(cupsSold).append(" cups.\n")
-              .append(String.format("    You made a net profit of $%-4.2f!%n", netProfit()));
+        report += String.format("    You charged $%-4.2f per cup.%n", pricePerCup)
+                + String.format("    Each cup cost $%-3.02f.%n", resourcePrices.costPerCup)
+                + "    You had " + dailyCustomers + " potential customers."
+                    + "  You sold " + cupsSold + " of " + cupsMade + " cups.\n"
+                + String.format("    You made a net profit of $%-4.2f!%n", netProfit());
 
-        return report.toString();
+        return report;
     }
 
     public double netProfit() {
-        return cupsSold * pricePerCup;
+        return cupsSold * (pricePerCup - resourcePrices.costPerCup)
+                    - signsMade * resourcePrices.signs;
     }
 
     private class ResourcePrices {

@@ -47,14 +47,21 @@ public class Game {
 
                 stand.setCupPrice(promptCupPrice());
 
+
                 stand.runDay(business.getMoney());
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
+
+                if (stand.netProfit() > 0) {
+                    System.out.println(stand.location() + " had a successful day!\n");
+                } else {
+                    System.out.println(stand.location() + " took a loss today.\n");
+                }
             }
 
-            dailyTotals[day] = dailyProfit;
             business.addProfit(dailyProfit);
-            for (String report : reports) {
+            dailyTotals[day - 1] = business.getMoney();
+            while (!reports.isEmpty()) {
                 System.out.println(reports.remove());
             }
             System.out.printf("Current total assets: $%5.02f%n%n", business.getMoney());
@@ -75,10 +82,10 @@ public class Game {
             }
         }
 
-        if (dailyTotals[1] != 0.00) {
+        if (dailyTotals[0] != 0.00) {
             System.out.println("Progress Report:");
-            for (int day = 1; day <= MAX_DAYS && dailyTotals[day] != 0.00; day++) {
-                System.out.printf("    Money on day %2d: $%-6.02f%n", day, dailyTotals[day]);
+            for (int day = 0; day < MAX_DAYS && dailyTotals[day] != 0.00; day++) {
+                System.out.printf("    Money on day %2d: $%-6.02f%n", day + 1, dailyTotals[day]);
             }
         }
 

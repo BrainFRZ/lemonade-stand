@@ -12,13 +12,14 @@ public class Customer {
      * This method determines whether a customer considers a cup of lemonade to be too expensive
      * based on the cup's price and the customer's generosity. Cups of lemonade can cost between
      * $0.70 and $1.67 with the average cup costing $1.13. For playability, the average customer
-     * will be willing to pay at least $2.00 before they consider it's too expensive.
+     * will be willing to pay at least $2.25 before they consider it's too expensive.
      * <p>
      * <p>However, to simulate customers' different personalities, they might be stingy, normal or
      * generous. They also will have a random change to the price they're willing to change to pay
      * more if they're generous or less if they're stingy. Weather is also a factor, since someone
      * will be willing to pay more on a hot and sunny day but not as much when it's a cool and
-     * cloudy day.
+     * cloudy day. Overall, the customer's price range is $1.50 (stingy and cool) to $3.00 (generous
+     * and hot).
      * <p>
      * <p>If the price of the cup isn't more than what they're willing to pay, it's not too
      * expensive.
@@ -29,7 +30,7 @@ public class Customer {
      */
     /*
      * BEGIN Too Expensive
-     *     Initialize price they're willing to pay to the lowest buy price ($2.00)
+     *     Initialize price they're willing to pay to the lowest buy price ($2.25)
      *     Calculate the stinginess multiplier between -1 and 1
      *     Calculate generosity delta randomly up to 50 cents
      *     Add stinginess multiplier times generosity delta to the price willing to be paid
@@ -38,7 +39,7 @@ public class Customer {
      * END Too Expensive
      */
     public static boolean tooExpensive(double price, Weather weather) {
-        final double LOWEST_BUY_PRICE = 2.00;   //All customers will pay at least $2.00
+        final double LOWEST_BUY_PRICE = 2.25;   //All customers will pay at least $2.25
 
         int stinginess;                             //Whether customer is stingy, normal or generous
         double generosityDelta;                     //Delta/Change based on generosity
