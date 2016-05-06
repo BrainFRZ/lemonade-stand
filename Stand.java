@@ -32,32 +32,33 @@ public class Stand {
 
     private ResourcePrices resourcePrices;
     private double pricePerCup;
+    private double openingMoney;
+    private double money;
 
     private int cupsMade, dailyCustomers, cupsSold, signsMade;
     private final String location;
-    private final Business business;
     private boolean dayGenerated;
     private Weather weather;
 
-    public Stand(String location, Business business) {
+    public Stand(String location) {
         this.location = location;
-        this.business = business;
         pricePerCup   = 0.00;
     }
 
-    public final void generateDay() {
+    public final void generateDay(double openingBalance) {
         if (!dayGenerated) {
             weather        = Weather.values()[Game.random.nextInt(Weather.values().length)];
             resourcePrices = new ResourcePrices();
             cupsSold       = cupsMade = 0;
             dailyCustomers = 0;
+            money          = openingMoney   = openingBalance;
             dayGenerated   = true;
         }
     }
 
     public void runDay(double totalMoney) {
         if (!dayGenerated) {
-            generateDay();
+            generateDay(totalMoney);
         }
 
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
@@ -69,6 +70,7 @@ public class Stand {
                 }
             }
         }
+        money += cupsSold * pricePerCup;
 
         dayGenerated = false;
     }
@@ -122,6 +124,7 @@ public class Stand {
     }
 
     public double makeProduct(String product, int quantity) {
+        final double CANT_AFFORD = -1.0;
         double cost;
 
         if (product.equalsIgnoreCase("cup")) {
@@ -132,8 +135,8 @@ public class Stand {
             throw new IllegalArgumentException("Illegal purchase:  " + product);
         }
 
-        if (cost <= business.getMoney()) {
-            business.spend(cost);
+        if (cost <= money) {
+            money -= cost;
 
             if (product.equalsIgnoreCase("cup")) {
                 cupsMade += quantity;
@@ -141,7 +144,7 @@ public class Stand {
                 signsMade += quantity;
             }
         } else {
-            cost = 0.00;
+            cost = CANT_AFFORD;
         }
 
         return cost;
@@ -160,8 +163,7 @@ public class Stand {
     }
 
     public double netProfit() {
-        return cupsSold * (pricePerCup - resourcePrices.costPerCup)
-                    - signsMade * resourcePrices.signs;
+        return money - openingMoney;
     }
 
     private class ResourcePrices {

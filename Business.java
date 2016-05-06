@@ -26,7 +26,7 @@ public class Business {
     public Business(String initialLocation) {
         money = STARTING_MONEY;
         locations = new LinkedList<>();
-        locations.add(new Stand(initialLocation, this));
+        locations.add(new Stand(initialLocation));
     }
 
     public double getMoney() {

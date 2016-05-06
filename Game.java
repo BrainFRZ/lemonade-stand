@@ -34,15 +34,15 @@ public class Game {
 
             System.out.println("\nDay " + day);
             for (Stand stand : business.locations()) {
-                stand.generateDay();
+                stand.generateDay(business.getMoney());
 
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                promptResourcePurchase(stand, business, "sign", stand.signPrice(),
+                dailyProfit -= promptResourcePurchase(stand, business, "sign", stand.signPrice(),
                                             "No one wants to buy your signs today.");
 
-                promptResourcePurchase(stand, business, "cup", stand.cupCost(),
+                dailyProfit -= promptResourcePurchase(stand, business, "cup", stand.cupCost(),
                                             "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
@@ -76,7 +76,7 @@ public class Game {
                     System.out.print("Would you like to purchase another stand [y/N]? ");
                     String response = scanner.nextLine();
                     if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
-                        business.buyStand(new Stand(promptStandLocation(), business));
+                        business.buyStand(new Stand(promptStandLocation()));
                     }
                 }
             }
@@ -92,11 +92,13 @@ public class Game {
         return business.getMoney();
     }
 
-    private static void promptResourcePurchase(Stand stand, Business business, String resourceName,
+    private static double promptResourcePurchase(Stand stand, Business business, String resourceName,
             double price, String negativeErrorMessage)
     {
         int quantity = 0;
-        double resourceCost = 0.00;
+
+        final double CANT_AFFORD = -1.0;
+        double resourceCost = CANT_AFFORD;
 
         System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
         do {
@@ -112,13 +114,13 @@ public class Game {
             } else {
                 resourceCost = stand.makeProduct(resourceName, quantity);
 
-                if (resourceCost == 0.00) {
+                if (resourceCost == CANT_AFFORD) {
                     System.out.print("You can't afford that many! ");
-                } else {
-                    business.spend(resourceCost);
                 }
             }
-        } while (quantity < 0 || resourceCost == 0.00);
+        } while (quantity < 0 || resourceCost == CANT_AFFORD);
+
+        return resourceCost;
     }
 
     private static double promptCupPrice() {
