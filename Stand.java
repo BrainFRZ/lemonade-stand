@@ -43,8 +43,6 @@ public class Stand {
         this.location = location;
         this.business = business;
         pricePerCup   = 0.00;
-
-        generateDay();
     }
 
     public final void generateDay() {
@@ -58,7 +56,9 @@ public class Stand {
     }
 
     public void runDay(double totalMoney) {
-        generateDay();
+        if (!dayGenerated) {
+            generateDay();
+        }
 
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
             int hourlyCustomers = hourlyCustomers();

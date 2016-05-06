@@ -21,10 +21,11 @@ public class Game {
 
     public static double runGame() {
         String userContinues = "y";
-        Business business = new Business();
+        Business business;
 
         System.out.println("Congratulations on starting your new lemonade business!!");
-        business.add(new Stand(promptStandLocation(), business));
+        System.out.printf("You're beginning your venture with $%3.2f.%n", Business.STARTING_MONEY);
+        business = new Business(promptStandLocation());
 
         Queue<String> reports = new LinkedList<>();
         double[] dailyTotals = new double[MAX_DAYS];
@@ -32,8 +33,9 @@ public class Game {
             double dailyProfit = 0.00;
 
             System.out.println("\nDay " + day);
-            for (Stand stand : business) {
-                stand.runDay(business.getMoney());
+            for (Stand stand : business.locations()) {
+                stand.generateDay();
+
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
@@ -45,6 +47,7 @@ public class Game {
 
                 stand.setCupPrice(promptCupPrice());
 
+                stand.runDay(business.getMoney());
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
             }
@@ -66,7 +69,7 @@ public class Game {
                     System.out.print("Would you like to purchase another stand [y/N]? ");
                     String response = scanner.nextLine();
                     if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
-                        business.add(new Stand(promptStandLocation(), business));
+                        business.buyStand(new Stand(promptStandLocation(), business));
                     }
                 }
             }
