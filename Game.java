@@ -39,11 +39,11 @@ public class Game {
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                dailyProfit -= promptResourcePurchase(stand, business, "sign", stand.signPrice(),
-                                            "No one wants to buy your signs today.");
+                promptResourcePurchase(stand, business, "sign", stand.signPrice(),
+                                        "No one wants to buy your signs today.");
 
-                dailyProfit -= promptResourcePurchase(stand, business, "cup", stand.cupCost(),
-                                            "You can't drink your own product!");
+                promptResourcePurchase(stand, business, "cup", stand.cupCost(),
+                                        "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
 
