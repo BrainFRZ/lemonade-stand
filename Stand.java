@@ -121,9 +121,8 @@ public class Stand {
         return "The weather in " + location + " will be " + weather + " today.";
     }
 
-    public boolean makeProduct(String product, int quantity) {
-        boolean purchased = false;
-        double cost = 0.00;
+    public double makeProduct(String product, int quantity) {
+        double cost;
 
         if (product.equalsIgnoreCase("cup")) {
             cost = quantity * resourcePrices.costPerCup;
@@ -135,16 +134,17 @@ public class Stand {
 
         if (cost <= business.getMoney()) {
             business.spend(cost);
-            purchased = true;
 
             if (product.equalsIgnoreCase("cup")) {
                 cupsMade += quantity;
             } else {
                 signsMade += quantity;
             }
+        } else {
+            cost = 0.00;
         }
 
-        return purchased;
+        return cost;
     }
 
     public String dailyReport() {

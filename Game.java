@@ -39,10 +39,10 @@ public class Game {
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                promptResourcePurchase(stand, "sign", stand.signPrice(),
+                promptResourcePurchase(stand, business, "sign", stand.signPrice(),
                                             "No one wants to buy your signs today.");
 
-                promptResourcePurchase(stand, "cup", stand.cupCost(),
+                promptResourcePurchase(stand, business, "cup", stand.cupCost(),
                                             "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
@@ -92,11 +92,11 @@ public class Game {
         return business.getMoney();
     }
 
-    private static void promptResourcePurchase(Stand stand, String resourceName, double price,
-            String negativeErrorMessage)
+    private static void promptResourcePurchase(Stand stand, Business business, String resourceName,
+            double price, String negativeErrorMessage)
     {
         int quantity = 0;
-        boolean resourceMade = true;
+        double resourceCost = 0.00;
 
         System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
         do {
@@ -110,13 +110,15 @@ public class Game {
             if (quantity < 0) {
                 System.out.print(negativeErrorMessage + " ");
             } else {
-                resourceMade = stand.makeProduct(resourceName, quantity);
+                resourceCost = stand.makeProduct(resourceName, quantity);
 
-                if (!resourceMade) {
+                if (resourceCost == 0.00) {
                     System.out.print("You can't afford that many! ");
+                } else {
+                    business.spend(resourceCost);
                 }
             }
-        } while (quantity < 0 || !resourceMade);
+        } while (quantity < 0 || resourceCost == 0.00);
     }
 
     private static double promptCupPrice() {
