@@ -3,8 +3,8 @@ package lemonadestand;
 import java.util.LinkedList;
 
 public class Business extends LinkedList<Stand> {
-    public static final double STAND_PRICE = 150.00;        //Cost of a new stand
-    public static final double START_PRICE = 100.00;        //Money you start with in each stand
+    public static final double STAND_PRICE    = 150.00;     //Cost of a new stand
+    public static final double STARTING_MONEY = 100.00;     //Money you start with in each stand
 
     private double money;
 

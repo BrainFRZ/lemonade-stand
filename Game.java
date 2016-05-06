@@ -15,7 +15,6 @@ import java.util.Scanner;
 
 public class Game {
     private static final int MAX_DAYS = 30;
-    private static final double STARTING_MONEY = 100.00;
 
     protected final static Random random = new Random();
     private static final Scanner scanner = new Scanner(System.in);
@@ -23,96 +22,47 @@ public class Game {
     public static double runGame() {
         String userContinues = "y";
         Business business = new Business();
-        double totalAssets = STARTING_MONEY;
 
-        System.out.println("Congratulations on starting your new business!!");
+        System.out.println("Congratulations on starting your new lemonade business!!");
         business.add(new Stand(promptStandLocation(), business));
 
         Queue<String> reports = new LinkedList<>();
         double[] dailyTotals = new double[MAX_DAYS];
         for (int day = 1; day <= MAX_DAYS && !userContinues.equalsIgnoreCase("n"); day++) {
             double dailyProfit = 0.00;
-            boolean resourceMade = false;
 
             System.out.println("\nDay " + day);
             for (Stand stand : business) {
-                stand.runDay(totalAssets);
+                stand.runDay(business.getMoney());
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                System.out.printf("Your signs cost $%3.2f to make. ", stand.signPrice());
+                promptResourcePurchase(stand, "sign", stand.signPrice(),
+                                            "No one wants to buy your signs today.");
 
-                int resource = -1;
-                do {
-                    try {
-                        System.out.print("How many signs do you want to make? ");
-                        resource = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.print("That isn't a price! ");
-                    }
+                promptResourcePurchase(stand, "sign", stand.signPrice(),
+                                            "You can't drink your own product!");
 
-                    if (resource < 0) {
-                        System.out.print("No one wants to buy your signs today. ");
-                    } else {
-                        resourceMade = stand.makeProduct("signs", resource);
-
-                        if (!resourceMade) {
-                            System.out.print("You can't afford that many! ");
-                        }
-                    }
-                } while (resource < 0 || !resourceMade);
-
-
-                System.out.printf("Your cups cost $%3.2f to make. ", stand.cupCost());
-                do {
-                    try {
-                        System.out.print("How many signs do you want to make? ");
-                        resource = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.print("That isn't a price! ");
-                    }
-
-                    if (resource < 0) {
-                        System.out.print("You can't drink your own product! ");
-                    } else {
-                        resourceMade = stand.makeProduct("cups", resource);
-
-                        if (!resourceMade) {
-                            System.out.print("You can't afford that many! ");
-                        }
-                    }
-                } while (resource < 0 || !resourceMade);
-
-                double cupPrice = 0.00;
-                do {
-                    System.out.print("Enter your price per cup: ");
-                    try {
-                        cupPrice = Double.parseDouble(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.print("That isn't a price! ");
-                    }
-
-                    if (cupPrice <= 0.00) {
-                        System.out.print("It must be bad if you're paying people to buy! ");
-                    }
-                } while (cupPrice <= 0.00);
-                stand.setCupPrice(cupPrice);
+                stand.setCupPrice(promptCupPrice());
 
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
             }
 
             dailyTotals[day] = dailyProfit;
+            business.addProfit(dailyProfit);
             for (String report : reports) {
                 System.out.println(reports.remove());
             }
-            System.out.printf("Current total assets: $%5.02f%n%n", totalAssets);
+            System.out.printf("Current total assets: $%5.02f%n%n", business.getMoney());
 
             if (day < MAX_DAYS) {
                 System.out.print("Start another day [Y/n]? ");
                 userContinues = scanner.nextLine();
 
-                if (!userContinues.equalsIgnoreCase("n") && totalAssets >= Business.STAND_PRICE) {
+                if (!userContinues.equalsIgnoreCase("n")
+                        && business.getMoney() >= Business.STAND_PRICE)
+                {
                     System.out.print("Would you like to purchase another stand [y/N]? ");
                     String response = scanner.nextLine();
                     if (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("yes")) {
@@ -129,23 +79,53 @@ public class Game {
             }
         }
 
-        return totalAssets;
+        return business.getMoney();
+    }
+
+    private static void promptResourcePurchase(Stand stand, String resourceName, double price,
+            String negativeErrorMessage)
+    {
+        int quantity = 0;
+        boolean resourceMade = true;
+
+        System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
+        do {
+            try {
+                System.out.print("How many " + resourceName + "s do you want to make? ");
+                quantity = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.print("That isn't a quantity! ");
+            }
+
+            if (quantity < 0) {
+                System.out.print(negativeErrorMessage + " ");
+            } else {
+                resourceMade = stand.makeProduct(resourceName, quantity);
+
+                if (!resourceMade) {
+                    System.out.print("You can't afford that many! ");
+                }
+            }
+        } while (quantity < 0 || !resourceMade);
     }
 
     private static double promptCupPrice() {
-        double price = 0.00;
-
-        System.out.print("Enter the price for a cup: ");
+        double cupPrice = 0.00;
 
         do {
+            System.out.print("Enter your price per cup: ");
             try {
-                price = Double.parseDouble(scanner.nextLine());
+                cupPrice = Double.parseDouble(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a price! ");
             }
-        } while (price <= 0.00);
 
-        return price;
+            if (cupPrice <= 0.00) {
+                System.out.print("It must be bad if you're paying customers to buy! ");
+            }
+        } while (cupPrice <= 0.00);
+
+        return cupPrice;
     }
 
     private static String promptStandLocation() {

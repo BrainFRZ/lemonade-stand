@@ -33,7 +33,7 @@ public class Stand {
     private ResourcePrices resourcePrices;
     private double pricePerCup;
 
-    private int cupsMade, cupsSold, signsMade;
+    private int cupsMade, dailyCustomers, cupsSold, signsMade;
     private final String location;
     private final Business business;
     private boolean dayGenerated;
@@ -51,7 +51,8 @@ public class Stand {
         if (!dayGenerated) {
             weather        = Weather.values()[Game.random.nextInt(Weather.values().length)];
             resourcePrices = new ResourcePrices();
-            cupsMade       = cupsSold = 0;
+            cupsSold       = cupsMade = 0;
+            dailyCustomers = 0;
             dayGenerated   = true;
         }
     }
@@ -61,6 +62,7 @@ public class Stand {
 
         for (int hour = START_HOUR; hour <= CLOSE_HOUR; hour++) {
             int hourlyCustomers = hourlyCustomers();
+            dailyCustomers += hourlyCustomers;
             for (int customer = 0; customer < hourlyCustomers; customer++) {
                 if (!Customer.tooExpensive(pricePerCup, weather)) {
                     cupsSold++;
@@ -123,9 +125,9 @@ public class Stand {
         boolean purchased = false;
         double cost = 0.00;
 
-        if (product.equalsIgnoreCase("cups")) {
+        if (product.equalsIgnoreCase("cup")) {
             cost = quantity * resourcePrices.costPerCup;
-        } else if (product.equalsIgnoreCase("signs")) {
+        } else if (product.equalsIgnoreCase("sign")) {
             cost = quantity * resourcePrices.signs;
         } else {
             throw new IllegalArgumentException("Illegal purchase:  " + product);
@@ -135,7 +137,7 @@ public class Stand {
             business.spend(cost);
             purchased = true;
 
-            if (product.equalsIgnoreCase("cups")) {
+            if (product.equalsIgnoreCase("cup")) {
                 cupsMade += quantity;
             } else {
                 signsMade += quantity;
@@ -151,6 +153,7 @@ public class Stand {
         report.append("Daily Report for ").append(location).append("\n")
               .append(String.format("    You charged $%-4.2f per cup.%n", pricePerCup))
               .append(String.format("    Each cup cost $%-3.02f.%n", resourcePrices.costPerCup))
+              .append("    You had ").append(dailyCustomers).append(" potential customers.")
               .append("    You sold ").append(cupsSold).append(" cups.\n")
               .append(String.format("    You made a net profit of $%-4.2f!%n", netProfit()));
 

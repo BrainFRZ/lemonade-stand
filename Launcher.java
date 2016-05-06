@@ -15,14 +15,14 @@ public class Launcher {
 
     public static void main(String[] args) {
         String option;
-        ArrayList<Double> highScores;
+        ArrayList<Double> highScores = loadHighScores(SCORES_FILE);
 
 //        System.out.println("          Lemonade Stand");
 
         Game.runGame();
     }
 
-    private static ArrayList<Double> loadHighScores() {
+    private static ArrayList<Double> loadHighScores(String filename) {
         ArrayList<Double> scores = new ArrayList<>();
 
         return scores;
