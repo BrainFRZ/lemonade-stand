@@ -40,7 +40,7 @@ public class Game {
                 promptResourcePurchase(stand, "sign", stand.signPrice(),
                                             "No one wants to buy your signs today.");
 
-                promptResourcePurchase(stand, "sign", stand.signPrice(),
+                promptResourcePurchase(stand, "cup", stand.cupCost(),
                                             "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
@@ -72,9 +72,9 @@ public class Game {
             }
         }
 
-        if (dailyTotals[0] != 0.00) {
+        if (dailyTotals[1] != 0.00) {
             System.out.println("Progress Report:");
-            for (int day = 0; day < MAX_DAYS && dailyTotals[day] != 0.00; day++) {
+            for (int day = 1; day <= MAX_DAYS && dailyTotals[day] != 0.00; day++) {
                 System.out.printf("    Money on day %2d: $%-6.02f%n", day, dailyTotals[day]);
             }
         }

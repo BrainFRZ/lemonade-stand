@@ -8,6 +8,10 @@ public class Business extends LinkedList<Stand> {
 
     private double money;
 
+    public Business() {
+        money = STARTING_MONEY + STAND_PRICE;   //Adds what it'll cost for the first stand
+    }
+
     public double getMoney() {
         return money;
     }
