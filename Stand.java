@@ -9,10 +9,6 @@
 package lemonadestand;
 
 public class Stand {
-    public static enum Resource {
-        CUPS, ICE, LEMONS, SUGAR, WATER;
-    }
-
     //Public info for all stands
     public static final int BASE_HOURLY_CUSTOMERS = 10;     //Normal number of customers in an hour
 
