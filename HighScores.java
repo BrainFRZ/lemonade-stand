@@ -73,12 +73,15 @@ public class HighScores implements Serializable {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        boolean added = true;
 
-        out.append("            High Scores\n");
+        if (scoreSheet.isEmpty()) {
+            out.append("There currently aren't any high scores.\n");
+        } else {
+            out.append("            High Scores\n");
 
-        for (int i = 0; i < scoreSheet.size() && added; i++) {
-            out.append(getScore(i)).append("\n");
+            for (Score score : scoreSheet) {
+                out.append(score).append("\n");
+            }
         }
 
         return out.toString();
@@ -101,7 +104,7 @@ public class HighScores implements Serializable {
     }
 
     public static HighScores loadHighScores(String filename) {
-        HighScores scores = null;
+        HighScores scores;
         FileInputStream fis = null;
         ObjectInputStream ois = null;
 
@@ -110,7 +113,7 @@ public class HighScores implements Serializable {
             ois = new ObjectInputStream(fis);
             scores = (HighScores)ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            //Method will return null
+            scores = new HighScores();
         } finally {
             try {
                 if (fis != null)

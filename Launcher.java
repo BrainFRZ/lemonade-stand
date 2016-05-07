@@ -14,46 +14,70 @@ public class Launcher {
     private final static Scanner scanner = new Scanner(System.in);
     private final static String SCORES_FILE = "highscores.sco";
     private final static int INVALID_OPTION = 0;
-    private final static int NEW_GAME = 1;
-    private final static int HELP     = 2;
-    private final static int QUIT     = 3;
+    private final static int NEW_GAME    = 1;
+    private final static int HIGH_SCORES = 2;
+    private final static int QUIT        = 3;
 
     public static void main(String[] args) {
         HighScores highScores = HighScores.loadHighScores(SCORES_FILE);
-        String name;
-        boolean gameOver;
-        double score;
+        int option;
 
         do {
-            score = Game.runGame();
+            option = promptMenuOption();
 
-            if (highScores != null) {
-                if (score > highScores.lowestScore()) {
-                    System.out.println("Congratulations!! You got a high score!");
-                    System.out.print("What's your name? ");
-                    name = scanner.nextLine();
-
-                    highScores.addScore(name, score);
-                }
-
-                HighScores.saveHighScores(SCORES_FILE, highScores);
+            switch (option) {
+                case NEW_GAME:
+                    startGame(highScores);
+                    break;
+                case HIGH_SCORES:
+                    System.out.println(highScores);
+                    break;
+                case QUIT:
+                    HighScores.saveHighScores(SCORES_FILE, highScores);
+                    break;
             }
-
-            gameOver = promptGameOver();
-
-            if (highScores != null) {
-                HighScores.saveHighScores(SCORES_FILE, highScores);
-            }
-
-        } while (!gameOver);
+        } while (option != QUIT);
     }
 
-    private static boolean promptGameOver() {
-        String continues;
+    private static int promptMenuOption() {
+        int option = INVALID_OPTION;
 
-        System.out.print("Would you like to play another game? ");
-        continues = scanner.nextLine();
+        System.out.println("          Lemonade Stand");
+        System.out.println("    1. Start a new game");
+        System.out.println("    2. High Scores");
+        System.out.println("    3. Quit");
 
-        return (continues.equalsIgnoreCase("n") || continues.equalsIgnoreCase("no"));
+        do {
+            System.out.print("Enter an option: ");
+
+            try {
+                option = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                //Option will stay invalid
+            }
+
+            if (option < NEW_GAME || option > QUIT) {
+                System.out.print("That isn't a valid option. ");
+            }
+        } while (option < NEW_GAME || option > QUIT);
+
+        return option;
+    }
+
+    private static void startGame(HighScores highScores) {
+        double score;
+        String name;
+
+        score = Game.runGame();
+
+        if (score > highScores.lowestScore()) {
+            System.out.println("Congratulations!! You got a high score!");
+            System.out.print("What's your name? ");
+            name = scanner.nextLine();
+
+            highScores.addScore(name, score);
+        }
+
+        HighScores.saveHighScores(SCORES_FILE, highScores);
     }
 }
