@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class Game {
     private static final int MAX_DAYS = 30;
 
-    protected final static Random random = new Random();
+    protected static final Random random = new Random();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static double runGame() {
@@ -25,7 +25,7 @@ public class Game {
 
         System.out.println("Congratulations on starting your new lemonade business!!");
         System.out.printf("You're beginning your venture with $%3.2f.%n", Business.STARTING_MONEY);
-        business = new Business(promptStandLocation());
+        business = new Business(new Stand(promptStandLocation()));
 
         Queue<String> reports = new LinkedList<>();
         double[] dailyTotals = new double[MAX_DAYS];
@@ -51,16 +51,10 @@ public class Game {
 
                 stand.setCupPrice(promptCupPrice());
 
-
                 stand.runDay(dailyMoney - dailyExpenses);
+
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
-
-                if (stand.netProfit() > 0) {
-                    System.out.println(stand.location() + " had a successful day!\n");
-                } else {
-                    System.out.println(stand.location() + " took a loss today.\n");
-                }
             }
 
             business.addProfit(dailyProfit);

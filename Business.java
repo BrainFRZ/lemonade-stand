@@ -6,9 +6,9 @@ public class Business {
     public static final double STAND_PRICE    = 150.00;     //Cost of a new stand
     public static final double STARTING_MONEY = 100.00;     //Money you start with in each stand
 
-    private final LinkedList<Stand> locations;
+    private final LinkedList<Stand> locations;  //Linked list of the Stands/business locations
 
-    private double money;
+    private double money;   //How much money the business since last close of business day
 
     /**
      * Constructs a new Business. This creates and adds your first stand to the list of locations
