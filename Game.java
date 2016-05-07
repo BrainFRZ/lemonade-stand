@@ -34,7 +34,7 @@ public class Game {
             double dailyExpenses = 0.00;
             double dailyMoney = business.getMoney();
 
-            System.out.println("\nDay " + day);
+            System.out.println("\nDay " + day + " Prep");
             for (Stand stand : business.locations()) {
                 stand.generateDay(dailyMoney - dailyExpenses);
 
@@ -93,9 +93,10 @@ public class Game {
     private static double promptResourcePurchase(Stand stand, double currentMoney,
             String resourceName, double price, String negativeErrorMessage)
     {
-        int quantity = 0;
-
         final double CANT_AFFORD = -1.0;
+
+        String input;
+        int quantity = 0;
         double resourceCost = CANT_AFFORD;
 
         System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
@@ -103,7 +104,11 @@ public class Game {
             try {
                 System.out.print("How many " + resourceName + "s do you want to make [" +
                         (int)(currentMoney / price) + " max]? ");
-                quantity = Integer.parseInt(scanner.nextLine());
+                input = scanner.nextLine();
+
+                if (!input.isEmpty()) {
+                    quantity = Integer.parseInt(input);
+                }
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a quantity! ");
             }
@@ -124,11 +129,18 @@ public class Game {
 
     private static double promptCupPrice() {
         double cupPrice = 0.00;
+        String input;
 
         do {
             System.out.print("Enter your price per cup: ");
             try {
-                cupPrice = Double.parseDouble(scanner.nextLine());
+                input = scanner.nextLine();
+
+                if (input.charAt(0) == '$' && input.length() > 1) {
+                    input = input.substring(1);
+                }
+
+                cupPrice = Double.parseDouble(input);
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a price! ");
             }
