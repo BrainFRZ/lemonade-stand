@@ -32,24 +32,27 @@ public class Game {
         for (int day = 1; day <= MAX_DAYS && !userContinues.equalsIgnoreCase("n"); day++) {
             double dailyProfit = 0.00;
             double dailyExpenses = 0.00;
+            double dailyMoney = business.getMoney();
 
             System.out.println("\nDay " + day);
             for (Stand stand : business.locations()) {
-                stand.generateDay(business.getMoney() - dailyExpenses);
+                stand.generateDay(dailyMoney - dailyExpenses);
 
                 System.out.println(stand.weatherForecast());
+                System.out.printf("You currently have $%3.2f left for the day.%n",
+                                        dailyMoney - dailyExpenses);
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                dailyExpenses += promptResourcePurchase(stand, business, "sign", stand.signPrice(),
-                                        "No one wants to buy your signs today.");
+                dailyExpenses += promptResourcePurchase(stand, dailyMoney - dailyExpenses,
+                                "sign", stand.signPrice(), "No one wants to buy your signs today.");
 
-                dailyExpenses += promptResourcePurchase(stand, business, "cup", stand.cupCost(),
-                                        "You can't drink your own product!");
+                dailyExpenses += promptResourcePurchase(stand, dailyMoney - dailyExpenses,
+                                    "cup", stand.cupCost(), "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
 
 
-                stand.runDay(business.getMoney() - dailyExpenses);
+                stand.runDay(dailyMoney - dailyExpenses);
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
 
@@ -93,8 +96,8 @@ public class Game {
         return business.getMoney();
     }
 
-    private static double promptResourcePurchase(Stand stand, Business business, String resourceName,
-            double price, String negativeErrorMessage)
+    private static double promptResourcePurchase(Stand stand, double currentMoney,
+            String resourceName, double price, String negativeErrorMessage)
     {
         int quantity = 0;
 
@@ -104,7 +107,8 @@ public class Game {
         System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
         do {
             try {
-                System.out.print("How many " + resourceName + "s do you want to make? ");
+                System.out.print("How many " + resourceName + "s do you want to make [" +
+                        (int)(currentMoney / price) + " max]? ");
                 quantity = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a quantity! ");

@@ -13,7 +13,6 @@ public class Stand {
         CUPS, ICE, LEMONS, SUGAR, WATER;
     }
 
-
     //Public info for all stands
     public static final int BASE_HOURLY_CUSTOMERS = 10;     //Normal number of customers in an hour
 
@@ -153,11 +152,11 @@ public class Stand {
     public String dailyReport() {
         String report = "Daily Report for " + location + "\n";
 
-        report += String.format("    You charged $%-4.2f per cup.%n", pricePerCup)
-                + String.format("    Each cup cost $%-3.02f.%n", resourcePrices.costPerCup)
+        report += String.format("    Each cup cost $%-3.02f.", resourcePrices.costPerCup)
+                        + String.format("  You charged $%-4.2f per cup.%n", pricePerCup)
                 + "    You had " + dailyCustomers + " potential customers."
-                    + "  You sold " + cupsSold + " of " + cupsMade + " cups.\n"
-                + String.format("    You made a net profit of $%-4.2f!%n", netProfit());
+                        + "  You sold " + cupsSold + " of " + cupsMade + " cups.\n"
+                + String.format("    You made a net profit of $%.2f!%n", netProfit());
 
         return report;
     }
@@ -166,16 +165,24 @@ public class Stand {
         return money - openingMoney;
     }
 
+    /**
+     * This class holds all the daily prices and is unique each day for each stand. Since this
+     * container is more of a struct than a class, all fields are public so they don't restrict
+     * the class's privacy modifier.
+     */
     private class ResourcePrices {
-        public double lemons;
-        public double sugar;
-        public double ice;
-        public double water;
-        public double cups;
-        public double signs;
-        public double costPerCup;
+        public final double lemons;         //Cost of lemons
+        public final double sugar;          //Cost of sugar
+        public final double ice;            //Cost of ice
+        public final double water;          //Cost of water
+        public final double cups;           //Cost of cups
+        public final double signs;          //Cost of signs
+        public final double costPerCup;     //Overall cost per cup of lemonade
 
-        public ResourcePrices() {
+        /**
+         * Randomly generates the resource prices for the day, and the overall cost per cup.
+         */
+        private ResourcePrices() {
             lemons = LEMONS_PRICES[Game.random.nextInt(LEMONS_PRICES.length)];
             sugar = SUGAR_PRICES[Game.random.nextInt(SUGAR_PRICES.length)];
             ice = ICE_PRICES[Game.random.nextInt(ICE_PRICES.length)];
