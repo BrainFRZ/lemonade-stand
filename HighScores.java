@@ -75,7 +75,7 @@ public class HighScores implements Serializable {
         StringBuilder out = new StringBuilder();
         boolean added = true;
 
-        out.append("    High Scores\n");
+        out.append("            High Scores\n");
 
         for (int i = 0; i < scoreSheet.size() && added; i++) {
             out.append(getScore(i)).append("\n");
