@@ -14,19 +14,19 @@ public class Business {
      * Constructs a new Business. This creates and adds your first stand to the list of locations
      * for free, and also sets up your initial money.
      *
-     * @param initialLocation Location name of the first stand
+     * @param initialStand The first stand to be added (given for free)
      */
     /*
      * START Constructor
      *     Set money to starting money
      *     Initialize locations as an empty linked list
-     *     Create and add new stand based on initial location
+     *     Add initial stand
      * END Constructor
      */
-    public Business(String initialLocation) {
+    public Business(Stand initialStand) {
         money = STARTING_MONEY;
         locations = new LinkedList<>();
-        locations.add(new Stand(initialLocation));
+        locations.add(initialStand);
     }
 
     public double getMoney() {
