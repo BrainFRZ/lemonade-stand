@@ -31,24 +31,25 @@ public class Game {
         double[] dailyTotals = new double[MAX_DAYS];
         for (int day = 1; day <= MAX_DAYS && !userContinues.equalsIgnoreCase("n"); day++) {
             double dailyProfit = 0.00;
+            double dailyExpenses = 0.00;
 
             System.out.println("\nDay " + day);
             for (Stand stand : business.locations()) {
-                stand.generateDay(business.getMoney());
+                stand.generateDay(business.getMoney() - dailyExpenses);
 
                 System.out.println(stand.weatherForecast());
 
                 System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                promptResourcePurchase(stand, business, "sign", stand.signPrice(),
+                dailyExpenses += promptResourcePurchase(stand, business, "sign", stand.signPrice(),
                                         "No one wants to buy your signs today.");
 
-                promptResourcePurchase(stand, business, "cup", stand.cupCost(),
+                dailyExpenses += promptResourcePurchase(stand, business, "cup", stand.cupCost(),
                                         "You can't drink your own product!");
 
                 stand.setCupPrice(promptCupPrice());
 
 
-                stand.runDay(business.getMoney());
+                stand.runDay(business.getMoney() - dailyExpenses);
                 reports.add(stand.dailyReport());
                 dailyProfit += stand.netProfit();
 
