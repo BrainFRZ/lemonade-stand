@@ -63,6 +63,12 @@ public class Business {
     }
 
     public LinkedList<Stand> locations() {
-        return locations;
+        LinkedList<Stand> copy = new LinkedList<>();
+
+        for (Stand location : locations) {
+            copy.add(location);
+        }
+
+        return copy;
     }
 }
