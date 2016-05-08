@@ -39,7 +39,7 @@ public class Customer {
      * END Too Expensive
      */
     public static boolean tooExpensive(double price, Weather weather) {
-        final double LOWEST_BUY_PRICE = 2.25;   //All customers will pay at least $2.25
+        final double LOWEST_BUY_PRICE = 2.25;       //Average customers will pay $2.25
 
         int stinginess;                             //Whether customer is stingy, normal or generous
         double generosityDelta;                     //Delta/Change based on generosity

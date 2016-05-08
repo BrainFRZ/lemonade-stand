@@ -70,7 +70,7 @@ public class Launcher {
 
         score = Game.runGame();
 
-        if (score > highScores.lowestScore()) {
+        if (highScores.isEmpty() || score > highScores.lowestScore()) {
             System.out.println("Congratulations!! You got a high score!");
             System.out.print("What's your name? ");
             name = scanner.nextLine();

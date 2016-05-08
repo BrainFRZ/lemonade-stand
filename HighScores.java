@@ -30,6 +30,10 @@ public class HighScores implements Serializable {
         return scoreSheet.size();
     }
 
+    public boolean isEmpty() {
+        return scoreSheet.isEmpty();
+    }
+
     public Score getScore(int index) {
         return scoreSheet.get(index);
     }
@@ -90,7 +94,6 @@ public class HighScores implements Serializable {
     public static void main(String[] args) {
         double random;
         HighScores scores = new HighScores();
-        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < 10; i++) {
             random = Math.random() * 100;
@@ -139,7 +142,6 @@ public class HighScores implements Serializable {
             try {
                 fos = new FileOutputStream(filename);
                 oos = new ObjectOutputStream(fos);
-
                 oos.writeObject(highScores);
                 loaded = true;
             } catch (IOException e) {

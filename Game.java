@@ -38,7 +38,7 @@ public class Game {
             for (Stand stand : business.locations()) {
                 stand.generateDay(dailyMoney - dailyExpenses);
 
-                System.out.println(stand.weatherForecast());
+                System.out.println("\n" + stand.weatherForecast());
                 System.out.printf("You currently have $%3.2f left for the day.%n",
                                         dailyMoney - dailyExpenses);
 
@@ -60,7 +60,7 @@ public class Game {
             business.addProfit(dailyProfit);
             dailyTotals[day - 1] = business.getMoney();
             while (!reports.isEmpty()) {
-                System.out.println(reports.remove());
+                System.out.println("\n" + reports.remove());
             }
             System.out.printf("Current total assets: $%5.02f%n%n", business.getMoney());
 
@@ -108,19 +108,21 @@ public class Game {
 
                 if (!input.isEmpty()) {
                     quantity = Integer.parseInt(input);
+                } else {
+                    quantity = 0;   //Reset to 0 in case it's been looped back with a negative
+                }
+
+                if (quantity < 0) {
+                    System.out.print(negativeErrorMessage + " ");
+                } else {
+                    resourceCost = stand.makeProduct(resourceName, quantity);
+
+                    if (resourceCost == CANT_AFFORD) {
+                        System.out.print("You can't afford that many! ");
+                    }
                 }
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a quantity! ");
-            }
-
-            if (quantity < 0) {
-                System.out.print(negativeErrorMessage + " ");
-            } else {
-                resourceCost = stand.makeProduct(resourceName, quantity);
-
-                if (resourceCost == CANT_AFFORD) {
-                    System.out.print("You can't afford that many! ");
-                }
             }
         } while (quantity < 0 || resourceCost == CANT_AFFORD);
 
@@ -136,17 +138,16 @@ public class Game {
             try {
                 input = scanner.nextLine();
 
-                if (input.charAt(0) == '$' && input.length() > 1) {
+                if (input.length() > 1 && input.charAt(0) == '$') {
                     input = input.substring(1);
                 }
 
                 cupPrice = Double.parseDouble(input);
+                if (cupPrice <= 0.00) {
+                    System.out.print("It must be bad if you're paying customers to buy! ");
+                }
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a price! ");
-            }
-
-            if (cupPrice <= 0.00) {
-                System.out.print("It must be bad if you're paying customers to buy! ");
             }
         } while (cupPrice <= 0.00);
 

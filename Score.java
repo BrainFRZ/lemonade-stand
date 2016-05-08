@@ -8,17 +8,21 @@
 
 package lemonadestand;
 
-public class Score {
+import java.io.Serializable;
+
+public class Score implements Serializable {
+    private static final long serialVersionUID = 42L;     //Override JVM implementation ID
+
     public final String name;
     public final double score;
 
     public Score(String name, double score) {
-        this.name = name;
-        this.score = score;
+        this.name   = name;
+        this.score  = score;
     }
 
     @Override
     public String toString() {
-        return String.format("Name: %-15s  Score: $%.2f", name, score);
+        return String.format("Name: %-15s    Score: $%.2f", name, score);
     }
 }
