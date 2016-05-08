@@ -48,11 +48,21 @@ public class Game {
                 System.out.printf("You currently have $%3.2f left for the day.%n",
                                         dailyMoney - dailyExpenses);
 
-                newSigns = promptSignPurchase(stand, dailyMoney - dailyExpenses);
-                dailyExpenses += stand.buySigns(newSigns);
+                try {
+                    newSigns = promptSignPurchase(stand, dailyMoney - dailyExpenses);
+                    dailyExpenses += stand.buySigns(newSigns);
+                } catch (Stand.TooExpensiveException e) {
+                    //Shouldn't happen; Valid quantities are guaranteed by promptResourcePurchase
+                    System.out.println("You couldn't afford to buy any signs today.");
+                }
 
-                newCups = promptCupPurchase(stand.cupCost(), dailyMoney - dailyExpenses);
-                dailyExpenses += stand.buyCups(newCups);
+                try {
+                    newCups = promptCupPurchase(stand.cupCost(), dailyMoney - dailyExpenses);
+                    dailyExpenses += stand.buyCups(newCups);
+                } catch (Stand.TooExpensiveException e) {
+                    //Shouldn't happen; Valid quantities are guaranteed by promptResourcePurchase
+                    System.out.println("You couldn't afford to buy any cups today.");
+                }
 
                 stand.setCupPrice(promptCupPrice());
 
@@ -102,8 +112,8 @@ public class Game {
 
     private static int promptSignPurchase(Stand stand, double money) {
         System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-        return promptResourcePurchase(Stand.Product.SIGN, stand.signPrice(),
-                (int)(money / stand.signPrice()), "No one wants to buy your signs today.");
+        return promptResourcePurchase(Stand.Product.SIGN, stand.signCost(),
+                (int)(money / stand.signCost()), "No one wants to buy your signs today.");
     }
 
     private static int promptResourcePurchase(Stand.Product product, double price,

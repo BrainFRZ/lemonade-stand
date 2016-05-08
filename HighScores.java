@@ -49,7 +49,7 @@ public class HighScores implements Serializable {
         Score newScore = new Score(name, score);
 
         scores = scoreSheet.size();
-        if (scores == 0) {
+        if (scores < SCORES_STORED) {
             scoreSheet.add(newScore);
             added = true;
         } else {
