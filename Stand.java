@@ -9,6 +9,16 @@
 package lemonadestand;
 
 public class Stand {
+    public enum Product {
+        CUP, SIGN;
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+    }
+
+
     //Public info for all stands
     public static final int BASE_HOURLY_CUSTOMERS = 10;     //Normal number of customers in an hour
 
@@ -118,26 +128,31 @@ public class Stand {
         return "The weather in " + location + " will be " + weather + " today.";
     }
 
-    public double makeProduct(String product, int quantity) {
+    public double buyCups(int quantity) {
         final double CANT_AFFORD = -1.0;
         double cost;
 
-        if (product.equalsIgnoreCase("cup")) {
-            cost = quantity * resourcePrices.costPerCup;
-        } else if (product.equalsIgnoreCase("sign")) {
-            cost = quantity * resourcePrices.signs;
-        } else {
-            throw new IllegalArgumentException("Illegal purchase:  " + product);
-        }
+        cost = quantity * resourcePrices.costPerCup;
 
         if (cost <= money) {
             money -= cost;
+            cupsMade += quantity;
+        } else {
+            cost = CANT_AFFORD;
+        }
 
-            if (product.equalsIgnoreCase("cup")) {
-                cupsMade += quantity;
-            } else {
-                signsMade += quantity;
-            }
+        return cost;
+    }
+
+    public double buySigns(int quantity) {
+        final double CANT_AFFORD = -1.0;
+        double cost;
+
+        cost = quantity * resourcePrices.signs;
+
+        if (cost <= money) {
+            money -= cost;
+            signsMade += quantity;
         } else {
             cost = CANT_AFFORD;
         }

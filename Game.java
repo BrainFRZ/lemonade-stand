@@ -22,6 +22,12 @@ public class Game {
     public static double runGame() {
         String userContinues = "y";
         Business business;
+        double dailyProfit;     //Business's profit each day (Not the newspaper)
+        double dailyExpenses;   //Business's expenses each day
+        double dailyMoney;      //Business's money at last close of business day
+        int newSigns;           //New signs made each day each stand
+        int newCups;            //New cups made each day each stand
+
 
         System.out.println("Congratulations on starting your new lemonade business!!");
         System.out.printf("You're beginning your venture with $%3.2f.%n", Business.STARTING_MONEY);
@@ -30,9 +36,9 @@ public class Game {
         Queue<String> reports = new LinkedList<>();
         double[] dailyTotals = new double[MAX_DAYS];
         for (int day = 1; day <= MAX_DAYS && !userContinues.equalsIgnoreCase("n"); day++) {
-            double dailyProfit = 0.00;
-            double dailyExpenses = 0.00;
-            double dailyMoney = business.getMoney();
+            dailyProfit = 0.00;
+            dailyExpenses = 0.00;
+            dailyMoney = business.getMoney();
 
             System.out.println("\nDay " + day + " Prep");
             for (Stand stand : business.locations()) {
@@ -42,12 +48,11 @@ public class Game {
                 System.out.printf("You currently have $%3.2f left for the day.%n",
                                         dailyMoney - dailyExpenses);
 
-                System.out.println("You currently have " + stand.getSignsMade() + " signs.");
-                dailyExpenses += promptResourcePurchase(stand, dailyMoney - dailyExpenses,
-                                "sign", stand.signPrice(), "No one wants to buy your signs today.");
+                newSigns = promptSignPurchase(stand, dailyMoney - dailyExpenses);
+                dailyExpenses += stand.buySigns(newSigns);
 
-                dailyExpenses += promptResourcePurchase(stand, dailyMoney - dailyExpenses,
-                                    "cup", stand.cupCost(), "You can't drink your own product!");
+                newCups = promptCupPurchase(stand.cupCost(), dailyMoney - dailyExpenses);
+                dailyExpenses += stand.buyCups(newCups);
 
                 stand.setCupPrice(promptCupPrice());
 
@@ -90,20 +95,28 @@ public class Game {
         return business.getMoney();
     }
 
-    private static double promptResourcePurchase(Stand stand, double currentMoney,
-            String resourceName, double price, String negativeErrorMessage)
-    {
-        final double CANT_AFFORD = -1.0;
+    private static int promptCupPurchase(double cupCost, double money) {
+        return promptResourcePurchase(Stand.Product.CUP, cupCost,
+                 (int)(money / cupCost), "You can't drink your own product!");
+    }
 
+    private static int promptSignPurchase(Stand stand, double money) {
+        System.out.println("You currently have " + stand.getSignsMade() + " signs.");
+        return promptResourcePurchase(Stand.Product.SIGN, stand.signPrice(),
+                (int)(money / stand.signPrice()), "No one wants to buy your signs today.");
+    }
+
+    private static int promptResourcePurchase(Stand.Product product, double price,
+            int max, String negativeErrorMessage)
+    {
         String input;
         int quantity = 0;
-        double resourceCost = CANT_AFFORD;
 
-        System.out.printf("Each %s costs $%3.2f to make. ", resourceName, price);
+        System.out.printf("Each %s costs $%3.2f to make. ", product, price);
         do {
             try {
-                System.out.print("How many " + resourceName + "s do you want to make [" +
-                        (int)(currentMoney / price) + " max]? ");
+                System.out.print("How many " + product + "s do you want to make [" +
+                        max + " max]? ");
                 input = scanner.nextLine();
 
                 if (!input.isEmpty()) {
@@ -114,19 +127,15 @@ public class Game {
 
                 if (quantity < 0) {
                     System.out.print(negativeErrorMessage + " ");
-                } else {
-                    resourceCost = stand.makeProduct(resourceName, quantity);
-
-                    if (resourceCost == CANT_AFFORD) {
-                        System.out.print("You can't afford that many! ");
-                    }
+                } else if (quantity > max) {
+                    System.out.print("You can't afford that many! ");
                 }
             } catch (NumberFormatException e) {
                 System.out.print("That isn't a quantity! ");
             }
-        } while (quantity < 0 || resourceCost == CANT_AFFORD);
+        } while (quantity < 0 || quantity > max);
 
-        return resourceCost;
+        return quantity;
     }
 
     private static double promptCupPrice() {
