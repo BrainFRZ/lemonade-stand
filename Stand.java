@@ -433,13 +433,24 @@ public class Stand {
         /**
          * Randomly generates the resource prices for the day, and the overall cost per cup.
          */
+        /**
+         * BEGIN Constructor
+         *     Calculate and store price of lemons
+         *     Calculate and store price of sugar
+         *     Calculate and store price of ice
+         *     Calculate and store price of water
+         *     Calculate and store price of cups
+         *     Calculate and store price of signs
+         *     Add all prices and store cost per cup
+         * END Constructor
+         */
         private ResourcePrices() {
             lemons = LEMONS_PRICES[Game.random.nextInt(LEMONS_PRICES.length)];
-            sugar = SUGAR_PRICES[Game.random.nextInt(SUGAR_PRICES.length)];
-            ice = ICE_PRICES[Game.random.nextInt(ICE_PRICES.length)];
-            water = WATER_PRICE;
-            cups = CUPS_PRICE;
-            signs = SIGN_PRICE;
+            sugar  = SUGAR_PRICES[Game.random.nextInt(SUGAR_PRICES.length)];
+            ice    = ICE_PRICES[Game.random.nextInt(ICE_PRICES.length)];
+            water  = WATER_PRICE;
+            cups   = CUPS_PRICE;
+            signs  = SIGN_PRICE;
             costPerCup = lemons + sugar + ice + water + cups;
         }
     }

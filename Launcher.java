@@ -13,7 +13,7 @@ import java.util.Scanner;
 /**
  * The launcher class launches the program and allows the player to continue to play new games until
  * they want to quit. The player is also able to see the high scores list from here. This class
- * does not require state and should not be instantiated.
+ * handles the flow of the program and should not be instantiated.
  *
  * @author Terry Weiss
  */
@@ -125,9 +125,27 @@ public class Launcher {
         return option;
     }
 
+    /**
+     * Starts a new game. If the game qualifies for a high score, the player is prompted for their
+     * name, and the score is added and saved.
+     *
+     * @param highScores High scores object
+     */
+    /**
+     * START Start Game
+     *     Run game and store score
+     *     IF (score is positive AND (high scores list is empty
+     *                                  OR this score is higher than lowest)) THEN
+     *         Display congrats message
+     *         Prompt player's name
+     *         Create and add high score to list
+     *         Save high scores list
+     *     END IF
+     * END Start Game
+     */
     private static void startGame(HighScores highScores) {
-        double score;
-        String name;
+        double score;   //Ending score
+        String name;    //Player's name
 
         score = Game.runGame();
 
@@ -137,17 +155,30 @@ public class Launcher {
             name = scanner.nextLine();
 
             highScores.addScore(name, score);
+            HighScores.saveHighScores(SCORES_FILE, highScores);
         }
-
-        HighScores.saveHighScores(SCORES_FILE, highScores);
     }
 
+    /**
+     * Warms up the random number generator, since the first several iterations are more
+     * predictable.
+     */
+    /**
+     * BEGIN Warmup Random Generator
+     *     FOR (100 iterations)
+     *         Get next random integer
+     *     END FOR
+     * END Warmup Random Generator
+     */
     private static void warmupRandomGenerator() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             Game.random.nextInt();
         }
     }
 
+    /**
+     * Private empty constructor prevents class from being instantiated
+     */
     private Launcher() {
     }
 }

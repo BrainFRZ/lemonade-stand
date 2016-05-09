@@ -85,4 +85,10 @@ public class Customer {
 
         return modifier;
     }
+
+    /**
+     * This prevents the Customer utility class from being instantiated.
+     */
+    private Customer() {
+    }
 }

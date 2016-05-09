@@ -426,4 +426,10 @@ public class Game {
 
         return location;
     }
+
+    /**
+     * This prevents the Game utility class from being instantiated.
+     */
+    private Game() {
+    }
 }
