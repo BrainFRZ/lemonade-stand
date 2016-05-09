@@ -421,7 +421,7 @@ public class Stand {
      * This class holds all the daily prices and is unique each day for each stand randomly choosing
      * from the available prices specified by Stand.
      */
-    private class ResourcePrices {
+    private final class ResourcePrices {
         private final double lemons;         //Cost of lemons
         private final double sugar;          //Cost of sugar
         private final double ice;            //Cost of ice

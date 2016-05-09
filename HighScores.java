@@ -20,7 +20,7 @@ public class HighScores implements Serializable {
     public static int SCORES_STORED = 5;
     private static final long serialVersionUID = 42L;
 
-    private ArrayList<Score> scoreSheet;
+    private final ArrayList<Score> scoreSheet;
 
     public HighScores() {
         scoreSheet = new ArrayList<>(SCORES_STORED + 1);
@@ -34,7 +34,7 @@ public class HighScores implements Serializable {
         return scoreSheet.isEmpty();
     }
 
-    public Score getScore(int index) {
+    protected Score getScore(int index) {
         return scoreSheet.get(index);
     }
 
@@ -84,26 +84,11 @@ public class HighScores implements Serializable {
             out.append("            High Scores\n");
 
             for (Score score : scoreSheet) {
-                out.append(score).append("\n");
+                out.append(String.format("Name: %-15s    Score: $%.2f", score.name, score.score));
             }
         }
 
         return out.toString();
-    }
-
-    public static void main(String[] args) {
-        double random;
-        HighScores scores = new HighScores();
-
-        for (int i = 0; i < 10; i++) {
-            random = Math.random() * 100;
-            System.out.println("Trying " + random);
-
-            scores.addScore("abc", random);
-
-            System.out.println(scores);
-            System.out.println(scores.lowestScore());
-        }
     }
 
     public static HighScores loadHighScores(String filename) {
@@ -161,4 +146,18 @@ public class HighScores implements Serializable {
         return loaded;
     }
 
+    public static void main(String[] args) {
+        double random;
+        HighScores scores = new HighScores();
+
+        for (int i = 0; i < 10; i++) {
+            random = Math.random() * 100;
+            System.out.println("Trying " + random);
+
+            scores.addScore("abc", random);
+
+            System.out.println(scores);
+            System.out.println(scores.lowestScore());
+        }
+    }
 }
