@@ -3,7 +3,8 @@ package lemonadestand;
 /**
  * The Customer class is a static calculator to determine whether each customer will be willing to
  * buy a cup of lemonade. Every customer will be willing to pay a different price based on their
- * personality (whether they're stingy or generous) and how they feel about the weather.
+ * personality (whether they're stingy or generous) and how they feel about the weather. This class
+ * is only a collection of functions, and therefore should not be instantiated.
  *
  * @author Terry Weiss
  */

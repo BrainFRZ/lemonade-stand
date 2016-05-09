@@ -49,7 +49,7 @@ public class HighScores implements Serializable {
         Score newScore = new Score(name, score);
 
         scores = scoreSheet.size();
-        if (scores < SCORES_STORED) {
+        if (scores == 0) {
             scoreSheet.add(newScore);
             added = true;
         } else {
@@ -95,7 +95,7 @@ public class HighScores implements Serializable {
         double random;
         HighScores scores = new HighScores();
 
-        /*for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             random = Math.random() * 100;
             System.out.println("Trying " + random);
 
@@ -103,15 +103,7 @@ public class HighScores implements Serializable {
 
             System.out.println(scores);
             System.out.println(scores.lowestScore());
-        }*/
-
-        scores.addScore("Tom", 42.00);
-        scores.addScore("Brooke", 9001.00);
-        scores.addScore("Terry", 1792.36);
-        scores.addScore("Nelson", 151.50);
-        scores.addScore("Frank", 248.72);
-
-        HighScores.saveHighScores("highscores.sco", scores);
+        }
     }
 
     public static HighScores loadHighScores(String filename) {

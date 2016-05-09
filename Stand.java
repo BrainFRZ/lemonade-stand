@@ -16,9 +16,20 @@ package lemonadestand;
  * @author Terry Weiss
  */
 public class Stand {
+
+    /**
+     * This enum lists the different products the player must buy for the stand. For the sake of
+     * use in strings, all enums should be singular so the caller has the option to pluralize if
+     * desired.
+     */
     public enum Product {
         CUP, SIGN;
 
+        /**
+         * Displays the enum value's name in lowercase.
+         *
+         * @return Name of the enum value in lowercase
+         */
         @Override
         public String toString() {
             return this.name().toLowerCase();
@@ -80,7 +91,7 @@ public class Stand {
      * @param openingBalance Initial balance to start the day
      * @return True if new day was generated
      */
-    /**
+    /*
      * START Generate Day
      *     Set generating new day to the opposite of if the day's already generated
      *     IF (generating new day) THEN
