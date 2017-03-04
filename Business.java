@@ -48,13 +48,6 @@ public class Business {
      *
      * @param initialStand The first stand to be added (given for free)
      */
-    /*
-     * START Constructor
-     *     Set money to starting money
-     *     Initialize locations as an empty linked list
-     *     Add initial stand
-     * END Constructor
-     */
     public Business(Stand initialStand) {
         money = STARTING_MONEY;
         locations = new LinkedList<>();
@@ -65,11 +58,6 @@ public class Business {
      * Gets how much money the business has.
      *
      * @return Business's money
-     */
-    /*
-     * BEGIN Get Money
-     *     Return amount of money
-     * END Get Money
      */
     public double getMoney() {
         return money;
@@ -82,18 +70,6 @@ public class Business {
      * @param expense Amount of the expense
      * @throws IllegalArgumentException If expense is negative
      * @return Whether the expense was spent
-     */
-    /*
-     * START Spend
-     *     Set spent to false
-     *     IF (Expense is negative) THEN
-     *         Throw illegal argument exception
-     *     ELSE IF (expense isn't more than money available) THEN
-     *         Subtract expense from money
-     *         Set spent to true
-     *     END IF
-     *     Return whether spent
-     * END Spend
      */
     public boolean spend(double expense) {
         boolean spent = false;
@@ -113,11 +89,6 @@ public class Business {
      *
      * @param profit Amount of profit
      */
-    /*
-     * START Add Profit
-     *     Add profit to money
-     * END ADD Profit
-     */
     public void addProfit(double profit) {
         money += profit;
     }
@@ -127,17 +98,6 @@ public class Business {
      *
      * @param newStand New Stand to be added
      * @return Whether stand was able to be added
-     */
-    /*
-     * START Buy Stand
-     *     Set added to false
-     *     IF (Money is at least cost of a new stand) THEN
-     *         Subtract stand price from money
-     *         Add new stand to locations list
-     *         Set added to true
-     *     END IF
-     *     Return whether added
-     * END Buy Stand
      */
     public boolean buyStand(Stand newStand) {
         boolean added = false;

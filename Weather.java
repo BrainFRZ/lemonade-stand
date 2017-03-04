@@ -39,19 +39,6 @@ public enum Weather {
      *
      * @return String representation of weather
      */
-    /*
-     * BEGIN To String
-     *     Init string to "crazy"
-     *     IF (it's rainy) THEN
-     *         Set string to "rainy"
-     *     ELSE IF (it's sunny)
-     *         Set string to "hot and sunny"
-     *     ELSE IF (it's cloudy) THEN
-     *         Set string to "cloudy and cool"
-     *     END IF
-     *     Return string
-     * END To String
-     */
     @Override
     public String toString() {
         String str = "crazy";

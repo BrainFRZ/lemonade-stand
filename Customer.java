@@ -55,16 +55,6 @@ public class Customer {
      * @param weather Weather at the stand the customer is at
      * @return True if the cup is too expensive
      */
-    /*
-     * BEGIN Too Expensive
-     *     Initialize price they're willing to pay to the lowest buy price ($2.25)
-     *     Calculate the stinginess multiplier between -1 and 1
-     *     Calculate generosity delta randomly up to 50 cents
-     *     Add stinginess multiplier times generosity delta to the price willing to be paid
-     *     Add weather modifier to the price willing to be paid
-     *     Return if price is more than the customer is willing to pay
-     * END Too Expensive
-     */
     public static boolean tooExpensive(double price, Weather weather) {
         final double LOWEST_BUY_PRICE = 2.25;       //Average customers will pay $2.25
 
@@ -89,16 +79,6 @@ public class Customer {
      *
      * @param weather The current weather at the stand
      * @return The amount of money a customer will pay more or less because of the weather
-     */
-    /**
-     * BEGIN Weather Modifier
-     *     Initialize modifier to 0
-     *     IF (it's cool/cloudy) THEN
-     *         Set modifier to -$0.25
-     *     ELSE IF (it's hot/sunny) THEN
-     *         Set modifier to +$0.25
-     *     END IF
-     * END Weather Modifier
      */
     private static double weatherModifier(Weather weather) {
         double modifier = 0.00;

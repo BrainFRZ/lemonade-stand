@@ -53,20 +53,6 @@ public class Launcher {
      *
      * @param args Console arguments aren't supported
      */
-    /*
-     * BEGIN Main
-     *     Load and store high scores from scores file
-     *     "Warm up" random number generator
-     *     DO WHILE (option isn't quit)
-     *         Prompt menu option
-     *         SWITCH (menu option)
-     *             CASE New Game:      Start game with high scores object
-     *             CASE High Scores:   Display high scores
-     *             CASE Quit:          Save high scores
-     *         END SWITCH
-     *     END DO-WHILE
-     * END Main
-     */
     public static void main(String[] args) {
         HighScores highScores;  //High scores list
         int option;             //Menu option selection
@@ -96,28 +82,6 @@ public class Launcher {
      * Prompts for a menu option. If the player enters an invalid option, they will be re-prompted.
      *
      * @return Menu option selected
-     */
-    /*
-     * START Menu Option
-     *
-     * END Prompt Menu Option
-     */
-    /*
-     * BEGIN Prompt Menu Option
-     *     Display menu
-     *     DO WHILE (menu option is out of bounds)
-     *         TRY
-     *             Prompt for option
-     *         CATCH (Invalid number)
-     *             Do nothing
-     *         END TRY-CATCH
-     *
-     *         IF (option is out of bounds)
-     *             Display option out of bounds
-     *         END IF
-     *     END DO-WHILE
-     *     Return option
-     * END Prompt Menu Option
      */
     private static int promptMenuOption() {
         int option = INVALID_OPTION;    //Selected menu option

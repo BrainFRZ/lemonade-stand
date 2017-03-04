@@ -90,12 +90,6 @@ public class Stand {
      *
      * @param location Location of the stand
      */
-    /*
-     * BEGIN Constructor
-     *     Store the given location
-     *     Set price per cup to $0.00
-     * END Constructor
-     */
     public Stand(String location) {
         this.location = location;
         pricePerCup   = 0.00;
@@ -108,20 +102,6 @@ public class Stand {
      *
      * @param openingBalance Initial balance to start the day
      * @return True if new day was generated
-     */
-    /*
-     * START Generate Day
-     *     Set generating new day to the opposite of if the day's already generated
-     *     IF (generating new day) THEN
-     *         Generate new weather forecast randomly from the possible values of Weather
-     *         Set new resource prices
-     *         Set cups sold and made to 0
-     *         Set daily customers to 0
-     *         Set money and opening money to the given opening balance
-     *         Set day generated to true
-     *     END IF
-     *     Return whether generating new day
-     * END Generate Day
      */
     public final boolean generateDay(double openingBalance) {
         boolean generatingNewDay;    //Whether new day should be generated
@@ -147,23 +127,6 @@ public class Stand {
      * day's stats.
      *
      * @param totalMoney Money you have at the beginning of the day for this stand.
-     */
-    /*
-     * START Run Day
-     *     IF (day hasn't been generated) THEN
-     *         Generate new day
-     *     END IF
-     *     FOR (each hour open)
-     *         Calculate how many potential customers will arrive
-     *         Add hourly customers to the total daily customers
-     *         FOR (each hourly customer or until all cups are made sold)
-     *             IF (customer doesn't think it's too expensive) THEN
-     *                 Increment cups sold
-     *             END IF
-     *         END FOR
-     *     END FOR
-     *     Increment money by cups sold times price per cup
-     * END Run Day
      */
     public void runDay(double totalMoney) {
         int hourlyCustomers;    //How many potential customers will arrive during the given hour
@@ -192,20 +155,6 @@ public class Stand {
      *
      * @return How many customers visit in an hour
      */
-    /*
-     * BEGIN Hourly customers
-     *     Set customers to base hourly customers
-     *     IF (Weather is rainy) THEN
-     *         Subtract a random number between 0 and 2
-     *     ELSE IF (Weather is cloudy) THEN
-     *         Add a random number between 0 and 4
-     *     ELSE IF (Weather is sunny) THEN
-     *         Add a random number between 0 and 10
-     *     END IF
-     *     Add 1% customers per sign made
-     *     Return customers
-     * END Hourly customers
-     */
     public int hourlyCustomers() {
         int customers = BASE_HOURLY_CUSTOMERS;  //How many customers in the hour
 
@@ -227,14 +176,6 @@ public class Stand {
      *
      * @param price Price per cup
      */
-    /*
-     * BEGIN Set Cup Price
-     *     IF (price isn't positive) THEN
-     *         Throw illegal argument exception with given price
-     *     END IF
-     *     Set price per cup to price
-     * END Set Cup Price
-     */
     public void setCupPrice(double price) {
         if (price <= 0) {
             throw new IllegalArgumentException("Negative price:  " + price);
@@ -248,11 +189,6 @@ public class Stand {
      *
      * @return Price per cup
      */
-    /*
-     * BEGIN Cup Price
-     *     Return price per cup
-     * END Cup Price
-     */
     public double cupPrice() {
         return pricePerCup;
     }
@@ -262,11 +198,6 @@ public class Stand {
      *
      * @return Cost per cup
      */
-    /*
-     * BEGIN Cup Cost
-     *     Return cost per cup
-     * END Cup Cost
-     */
     public double cupCost() {
         return resourcePrices.costPerCup;
     }
@@ -275,11 +206,6 @@ public class Stand {
      * Gets the cost to make each sign.
      *
      * @return Cost per sign
-     */
-    /*
-     * BEGIN Sign Cost
-     *     Return cost per sign
-     * END Sign Cost
      */
     public double signCost() {
         return resourcePrices.signs;
@@ -291,11 +217,6 @@ public class Stand {
      *
      * @return How many signs have been made at this stand
      */
-    /*
-     * BEGIN Get Signs Made
-     *     Return signs made
-     * END Get Signs Made
-     */
     public int getSignsMade() {
         return signsMade;
     }
@@ -305,11 +226,6 @@ public class Stand {
      *
      * @return Stand's location
      */
-    /*
-     * BEGIN Cup Cost
-     *     Return cost per cup
-     * END Cup Cost
-     */
     public String location() {
         return location;
     }
@@ -318,11 +234,6 @@ public class Stand {
      * Generates a weather forecast message including the stand's location and weather.
      *
      * @return Stand's location
-     */
-    /*
-     * BEGIN Weather Forecast
-     *     Return a message containing the location and weather
-     * END Weather Forecast
      */
     public String weatherForecast() {
         return "The weather in " + location + " will be " + weather + " today.";
@@ -335,18 +246,6 @@ public class Stand {
      * @param quantity Number of cups to buy
      * @throws TooExpensiveException If the stand can't afford the purchase
      * @return Cost for the quantity of cups
-     */
-    /*
-     * START Buy Cups
-     *     Set cost to quantity * cost per cup
-     *     IF (cost isn't more than money) THEN
-     *         Subtract cost from money
-     *         Add quantity to cups made
-     *     ELSE
-     *         Throw new too expensive exception
-     *     END IF
-     *     Return cost
-     * END Buy Cups
      */
     public double buyCups(int quantity) throws TooExpensiveException {
         double cost;
@@ -371,18 +270,6 @@ public class Stand {
      * @throws TooExpensiveException If the stand can't afford the purchase
      * @return Cost for the quantity of signs
      */
-    /*
-     * START Buy Signs
-     *     Set cost to quantity * cost per sign
-     *     IF (cost isn't more than money) THEN
-     *         Subtract cost from money
-     *         Add quantity to signs made
-     *     ELSE
-     *         Throw new too expensive exception
-     *     END IF
-     *     Return cost
-     * END Buy Signs
-     */
     public double buySigns(int quantity) throws TooExpensiveException {
         double cost;
 
@@ -404,11 +291,6 @@ public class Stand {
      *
      * @return Daily report message
      */
-    /*
-     * START Daily Report
-     *     Generate and return daily report message
-     * END Daily Report
-     */
     public String dailyReport() {
         String report = "Daily Report for " + location + "\n";
 
@@ -425,11 +307,6 @@ public class Stand {
      * Calculates the profit for the day.
      *
      * @return Today's profit for this stand
-     */
-    /*
-     * BEGIN Net Profit
-     *     Return current money - opening money
-     * END Net Profit
      */
     public double netProfit() {
         return money - openingMoney;

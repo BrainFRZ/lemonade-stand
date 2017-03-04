@@ -48,11 +48,6 @@ public class HighScores implements Serializable {
     /**
      * Constructs a new High Score list with the default scores stored.
      */
-    /*
-     * BEGIN Constructor
-     *     Initialize score sheet with an initial size of scores stored
-     * END Constructor
-     */
     public HighScores() {
         scoreSheet = new ArrayList<>(SCORES_STORED);
     }
@@ -62,11 +57,6 @@ public class HighScores implements Serializable {
      *
      * @return Number of scores listed
      */
-    /*
-     * BEGIN Scores
-     *     Return score sheet's size
-     * END Scores
-     */
     public int scores() {
         return scoreSheet.size();
     }
@@ -75,11 +65,6 @@ public class HighScores implements Serializable {
      * Determines whether there are any scores saved
      *
      * @return True if there are no scores saved
-     */
-    /*
-     * BEGIN Is Empty
-     *     Return whether score sheet is empty
-     * END Is Empty
      */
     public boolean isEmpty() {
         return scoreSheet.isEmpty();
@@ -91,14 +76,6 @@ public class HighScores implements Serializable {
      *
      * @throws NoScoresException If there are no scores saved
      * @return Lowest score value
-     */
-    /*
-     * BEGIN Lowest Score
-     *     IF (Score sheet is empty) THEN
-     *         Throw no scores exception
-     *     END IF
-     *     Get lowest score and return its score value
-     * END Lowest Score
      */
     public double lowestScore() throws NoScoresException {
         if (scoreSheet.isEmpty()) {
@@ -118,31 +95,6 @@ public class HighScores implements Serializable {
      * @param name   Player's name
      * @param score  Player's score
      * @return True if score was added
-     */
-    /*
-     * BEGIN Add Score
-     *     Initialize added to false
-     *     Store size of score sheet as scores
-     *     IF (there aren't any scores) THEN
-     *         Create and add new Score
-     *         Set added to true
-     *     ELSE
-     *         FOR (each score or until one is added)
-     *             IF (score value is higher than current score's score value) THEN
-     *                 IF (score sheet is full) THEN
-     *                     Remove lowest score
-     *                 END IF
-     *                 Create and insert new Score at current index
-     *                 Set added to true
-     *             END IF
-     *         END FOR
-     *         IF (Score wasn't added and the list isn't full) THEN
-     *             Create and append new score sheet
-     *             Set added to true
-     *         END IF
-     *     END IF
-     *     Return whether score was added
-     * END Add Score
      */
     public boolean addScore(String name, double score) {
         boolean added = false;  //Whether score was added
@@ -179,19 +131,6 @@ public class HighScores implements Serializable {
      *
      * @return String representation of the high score list
      */
-    /**
-     * BEGIN To String
-     *     IF (Score sheet is empty) THEN
-     *         Append message that there aren't any high scores
-     *     ELSE
-     *         Append high scores title
-     *         FOR (each score)
-     *             Append formatted string with score's name and score value
-     *         END FOR
-     *     END IF
-     *     Return built string
-     * END To String
-     */
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();    //Stringbuild to build output string
@@ -216,19 +155,6 @@ public class HighScores implements Serializable {
      *
      * @param filename Name of file to read from
      * @return New high score loaded, or empty one if unable to read
-     */
-    /*
-     * BEGIN Load High Scores
-     *     TRY
-     *         Init object input stream from file input stream from filename
-     *         Read and cast file object as a High Score and store it
-     *     CATCH (IO Exception)
-     *         Create and store new high scores object
-     *     FINALLY
-     *         Close all streams
-     *     END TRY-CATCH
-     *     Return new score sheet
-     * END Load High Scores
      */
     public static HighScores loadHighScores(String filename) {
         HighScores scores;              //New high scores object
@@ -257,23 +183,6 @@ public class HighScores implements Serializable {
      * @param filename    File to save high scores to
      * @param highScores  High scores to save
      * @return Whether high scores were able to be saved
-     */
-    /*
-     * START Save High Scores
-     *     Set saved to false
-     *     IF (high scores isn't null) THEN
-     *         TRY
-     *             Create object stream writer from file stream writer from filename
-     *             Write high score object to file
-     *             Set saved to true
-     *         CATCH (IO Exception)
-     *             Do nothing
-     *         FINALLY
-     *             Close all streams
-     *         END TRY-CATCH
-     *     END IF
-     *     Return whether scores were saved successfully
-     * END Save High Scores
      */
     public static boolean saveHighScores(String filename, HighScores highScores)
     {
@@ -309,11 +218,6 @@ public class HighScores implements Serializable {
         /**
          * Constructs the No Scores exception
          */
-        /*
-         * BEGIN Constructor
-         *     Create IndexOutOfBoundsException using no scores saved message
-         * END Constructor
-         */
         private NoScoresException() {
             super("No scores are saved");
         }
@@ -324,18 +228,6 @@ public class HighScores implements Serializable {
      * easily and visibly.
      *
      * @param args Console arguments aren't supported
-     */
-    /*
-     * BEGIN Main
-     *     Warm up RNG with 100 iterations
-     *     FOR (10 scores)
-     *         Generate a random score
-     *         Display score
-     *         Add new score
-     *         Display all scores so far
-     *         Display lowest score to make sure that works
-     *     END FOR
-     * END Main
      */
     public static void main(String[] args) {
         double random;                              //Random score
